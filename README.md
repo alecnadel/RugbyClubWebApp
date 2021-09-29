@@ -1,2 +1,2 @@
 # RugbyClubWebApp
-Code in HTML, Python and MySQL file to store and allow user to add data.
+#Code in HTML, CSS(bootstrap) Python(Flask) and MySQL(database) to store and allow users to add data.
