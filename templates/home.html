@@ -6,20 +6,16 @@
 </head>
 <body>
     <h1>Home Page </h1>
-  <form action="/members" method="POST">
+  <form action="/" method="POST">
     <label for="Name">Member Name</label>
-    <select class="form-select" aria-label="Default select example">
+    <select name='members' class="form-select" aria-label="Default select example">
       <option selected>Select a name</option>
         {% for member in Members %}
-        <option value = "Members">{{member}}</option>
-          <li>
-            {% if member[12]==0 %}
-            <a href="/members?MemberID={{member[0]}}">{{member[3]}} {{member[4]}}</a>
-            {% endif %}
-            {% if member[12]==1 %}
-            <a href="/admin">{{member[3]}} {{member[4]}}</a> <!--do I need ? for the /admin to get the information from mySQL?-->
-            {% endif %}
-          </li>
+        {% if member[3]==0 %}
+        <option value ="/member?MemberID={{member[2]}}">{{member[0] ~ ' ' ~ member[1]}}</option>
+        {% else %}
+        <option value ="/admin">{{member[0]}} {{member[1]}}</option>  
+        {% endif %}
         {% endfor %}
     </select>
     <input type="submit" value="Login" />

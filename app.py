@@ -27,32 +27,31 @@ def genID():
     return uuid.uuid4().fields[1]
 
 
-@app.route("/") #Default route - home page.
+@app.route("/", methods=['GET','POST']) #Default route - home page.
 def home():
-    return render_template('home.html')
+    if request.method=='POST':
+        root=request.form.get('members')
+        return redirect(root)
+    else:
+        cur = getCursor()
+        cur.execute("select MemberFirstName, MemberLastName, MemberID, AdminAccess from Members")
+        member = cur.fetchall()
+        return render_template('home.html', Members=member)
 
-@app.route('/clubnews', methods=['GET']) #Member page
-def getNews():
-    cur = getCursor()
-    cur.execute("select NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate LIMIT 3")
-    select_News = cur.fetchall()
-    ClubNews = [desc[0] for desc in cur.description]
-    print(f"{ClubNews}")
-    return render_template('members.html',ClubNews=select_News,News=ClubNews)
-
-@app.route('/members', methods=['GET','POST']) #Member page
+@app.route('/member', methods=['GET','POST']) #Member page
 def getMembers():
     MemberID = request.args.get("MemberID")
     print(MemberID)
-    if MemberID == '':
-        return redirect("members.html")
-    else:
-        cur = getCursor()
-        cur.execute("select * from Members where MemberID=%s",(MemberID,)) #not need code out the data from database. Use a for loop from Jinja template.
-        member = cur.fetchall() # in the GET video Stu said it is okay to use fetchone to get a list with parameter??
-        Members = [desc[0] for desc in cur.description]
-        print(f"{Members}")
-        return render_template('members.html',Members=member,clubmember=Members)
+    cur = getCursor()
+    cur.execute("select NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate LIMIT 3")
+    select_News = cur.fetchall()
+    print(select_News)
+    ClubNews = [desc[0] for desc in cur.description]
+    cur.execute("select * from Members where MemberID=%s",(MemberID,)) #not need code out the data from database. Use a for loop from Jinja template.
+    member = cur.fetchall() # in the GET video Stu said it is okay to use fetchone to get a list with parameter??
+    Members = [desc[0] for desc in cur.description]
+    print(f"{Members}")
+    return render_template('members.html',Members=member,clubmember=Members,ClubNews=select_News,News=ClubNews)
 
 @app.route('/admin', methods=['GET','POST']) #Admin page
 def getAdmin():
