@@ -27,67 +27,95 @@ def genID():
     return uuid.uuid4().fields[1]
 
 
-@app.route("/")
+@app.route("/") #Default route - home page.
 def home():
+    return render_template('home.html')
+
+@app.route('/clubnews', methods=['GET']) #Member page
+def getNews():
     cur = getCursor()
-    cur.execute("select id, company, last_name from customers;")
-    select_result = cur.fetchall()
-    column_names = [desc[0] for desc in cur.description]
-    print(f"{column_names}")
-    return render_template('customerresult.html',dbresult=select_result,dbcols=column_names)
+    cur.execute("select NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate LIMIT 3")
+    select_News = cur.fetchall()
+    ClubNews = [desc[0] for desc in cur.description]
+    print(f"{ClubNews}")
+    return render_template('members.html',ClubNews=select_News,News=ClubNews)
 
-@app.route('/order', methods=['GET'])
-def getOrder():
-    print(request.args)
-    orderid = request.args.get("orderid")
-    print(orderid)
-    cur = getCursor()
-    cur.execute("select * from orders where customer_id=%s",(orderid,))
-    select_result = cur.fetchall()
-    column_names = [desc[0] for desc in cur.description]
-    print(f"{column_names}")
-    return render_template('dbresult.html',dbresult=select_result,dbcols=column_names)
-
-
-@app.route('/customer', methods=['GET','POST'])
-def customer():
-    if request.method == 'POST':
-        print(request.form)
-        id = genID()
-        print(id)
-        company = request.form.get('companyname')
-        contact = request.form.get('contactname')
-        cur = getCursor()
-        cur.execute("INSERT INTO customers(customer_id, company_name, contact_name) VALUES (%s,%s,%s);",(str(id),company,contact,))
-        cur.execute("SELECT * FROM customers where customer_id=%s",(str(id),))
-        select_result = cur.fetchall()
-        column_names = [desc[0] for desc in cur.description]
-        return render_template('dbresult.html',dbresult=select_result,dbcols=column_names)
+@app.route('/members', methods=['GET','POST']) #Member page
+def getMembers():
+    MemberID = request.args.get("MemberID")
+    print(MemberID)
+    if MemberID == '':
+        return redirect("members.html")
     else:
-        return render_template('customerform.html')
+        cur = getCursor()
+        cur.execute("select * from Members where MemberID=%s",(MemberID,)) #not need code out the data from database. Use a for loop from Jinja template.
+        member = cur.fetchall() # in the GET video Stu said it is okay to use fetchone to get a list with parameter??
+        Members = [desc[0] for desc in cur.description]
+        print(f"{Members}")
+        return render_template('members.html',Members=member,clubmember=Members)
 
-@app.route('/customer/update', methods=['GET','POST'])
-def customerUpdate():
+@app.route('/admin', methods=['GET','POST']) #Admin page
+def getAdmin():
+    MemberID = request.args.get("MemberID")
+    print(MemberID)
+    if MemberID == '':
+        return redirect("admin.html")
+    else:
+        cur = getCursor()
+        cur.execute("select * from Members where MemberID=%s",(MemberID,))
+        select_admin = cur.fetchall()
+        admin = [desc[0] for desc in cur.description]
+        print(f"{admin}")
+        return render_template('admin.html',Members=select_admin)
+
+@app.route('/fixtures', methods=['GET','POST'])
+def getFixtures():
+    cur = getCursor()
+    cur.execute("select HomeTeam from Fixtures join Members on Fixtures.HomeTeam = Members.TeamID where FixturesID=[1] and [3]")
+    cur.execute("select HomeTeam from Fixtures join Teams on Fixtures.HomeTeam = Teams.TeamID where TeamID=[1] and [3]")
+    cur.execute("select TeamID from Teams join Fixtures on Teams.TeamID = Fixtures.AwayTeam")
+    select_Fixture = cur.fetchall()
+    Fixtures = [desc[0] for desc in cur.description]
+    print(f"{Fixtures}")
+    return render_template('members.html',Fixtures=select_Fixture,dbfixtures=Fixtures)
+
+@app.route('/members/update', methods=['GET','POST']) #Member page
+def MembersUpdate():
     if request.method == 'POST':
-            companyid = request.form.get('companyid')
-            companyname = request.form.get('companyname')
-            contactname = request.form.get('contactname')
+            Email  = request.form.get('Email')
+            Phone = request.form.get('Phone')
+            Address1 = request.form.get('Address1')
+            Address2 = request.form.get('Address2')
             cur = getCursor()
-            cur.execute("UPDATE customers SET company=%s, last_name=%s where id=%s",(companyname,contactname,str(companyid),))
+            cur.execute("UPDATE Members SET Email=%s, Address1=%s, Address2=%s, Phone=%s, where id=%s",(Email,Address1,Address2,str(Phone)))
             return redirect("/")
     else:
-        id = request.args.get('customerid')
-        if id == '':
+        MemberID = request.args.get('MemberID')
+        if MemberID == '':
             return redirect("/")
         else:
             cur = getCursor()
-            cur.execute("SELECT * FROM customers where id=%s",(str(id),))
-            select_result = cur.fetchone()
-            print(select_result)
-            return render_template('customerform.html',customerdetails = select_result)
+            cur.execute("SELECT * FROM Members where MemberID=%s",(str(MemberID),))
+            select_MemberID = cur.fetchone()
+            print(select_MemberID)
+            return render_template('members.html',Members = select_MemberID)
 
-
-
+#@app.route('/customer', methods=['GET','POST'])
+#def customer():
+    #if request.method == 'POST':
+        #print(request.form)
+        #id = genID()
+        #print(id)
+        #company = request.form.get('companyname')
+        #contact = request.form.get('contactname')
+        #cur = getCursor()
+        #cur.execute("INSERT INTO customers(customer_id, company_name, contact_name) VALUES (%s,%s,%s);",(str(id),company,contact,))
+        #cur.execute("SELECT * FROM customers where customer_id=%s",(str(id),))
+        #select_result = cur.fetchall()
+        #column_names = [desc[0] for desc in cur.description]
+        #return render_template('dbresult.html',dbresult=select_result,dbcols=column_names)
+    #else:
+        #return render_template('customerform.html')
 
 
 

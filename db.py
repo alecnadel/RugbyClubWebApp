@@ -5,15 +5,10 @@ conn = mysql.connector.connect(user=connect.dbuser, \
 print(f"connection done - {conn}")
 with conn:
     cur = conn.cursor()
-    cur.execute("select * from orders limit 5;")
-    select_result = cur.fetchall()
-    print(f"{select_result[0]}")
-    print(select_result)
-    print(type(select_result))
-    for result in select_result:
-         print(f"{result}")
-         print(type(result))
-         for entry in result:
-              print(f"{type(entry)} - {entry}")
+    cur.execute("select * from Fixtures limit 1;")
+    select_Fixtures = cur.fetchall()
+    print(select_Fixtures[0])
+    
+    
 
 
