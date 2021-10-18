@@ -22,7 +22,7 @@ def getCursor():
         return dbconn
     else:
         return dbconn
-
+#define the cursor action to get the data by connecting to database and enable the connection.
 def genID():
     return uuid.uuid4().fields[1]
 
@@ -31,52 +31,45 @@ def genID():
 def home():
     if request.method=='POST':
         root=request.form.get('members')
-        return redirect(root)
+        return redirect(root) #root here is the variable call to get the data from the Members table and redirect to the route.
     else:
         cur = getCursor()
         cur.execute("select MemberFirstName, MemberLastName, MemberID, AdminAccess from Members")
         member = cur.fetchall()
         return render_template('home.html', Members=member)
+#this function is return the data from Members table, execute the query through python from MySQL. Then get the data to display on Homepage.
 
-@app.route('/member', methods=['GET','POST']) #Member page
+@app.route('/member', methods=['GET','POST']) #Member page/member is a name given as variable for the route on the link.
 def getMembers():
     MemberID = request.args.get("MemberID")
     print(MemberID)
     cur = getCursor()
-    cur.execute("select NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate LIMIT 3")
+    cur.execute("select NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate LIMIT 3") #get data from ClubNews table, display the latest three news item.
     select_News = cur.fetchall()
     print(select_News)
     ClubNews = [desc[0] for desc in cur.description]
-    cur.execute("select * from Members where MemberID=%s",(MemberID,)) #not need code out the data from database. Use a for loop from Jinja template.
-    member = cur.fetchall() # in the GET video Stu said it is okay to use fetchone to get a list with parameter??
+    cur.execute("select MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone from Members where MemberID=%s",(MemberID,))
+    #get data from Members table and identify the member by their unique MemberID.
+    member = cur.fetchall()
     Members = [desc[0] for desc in cur.description]
     print(f"{Members}")
-    return render_template('members.html',Members=member,clubmember=Members,ClubNews=select_News,News=ClubNews)
+    #display list of upcoming fixtures. Use join table method to display the game information join in either hometeam or awayteam.
+    cur.execute("select FixtureID, FixtureDate, HomeTeam, AwayTeam from Fixtures join Members on Fixtures.HomeTeam = Members.TeamID where FixtureDate > '2021-10-22 19:30:00'")
+    select_Fixture = cur.fetchall()
+    Fixtures = [desc[0] for desc in cur.description]
+    print(f"{Fixtures}")
+    return render_template('members.html',Members=member,clubmember=Members,ClubNews=select_News,News=ClubNews,Fixtureresult=select_Fixture,fixturecolumn=Fixtures)
 
 @app.route('/admin', methods=['GET','POST']) #Admin page
 def getAdmin():
     MemberID = request.args.get("MemberID")
     print(MemberID)
-    if MemberID == '':
-        return redirect("admin.html")
-    else:
-        cur = getCursor()
-        cur.execute("select * from Members where MemberID=%s",(MemberID,))
-        select_admin = cur.fetchall()
-        admin = [desc[0] for desc in cur.description]
-        print(f"{admin}")
-        return render_template('admin.html',Members=select_admin)
-
-@app.route('/fixtures', methods=['GET','POST'])
-def getFixtures():
     cur = getCursor()
-    cur.execute("select HomeTeam from Fixtures join Members on Fixtures.HomeTeam = Members.TeamID where FixturesID=[1] and [3]")
-    cur.execute("select HomeTeam from Fixtures join Teams on Fixtures.HomeTeam = Teams.TeamID where TeamID=[1] and [3]")
-    cur.execute("select TeamID from Teams join Fixtures on Teams.TeamID = Fixtures.AwayTeam")
-    select_Fixture = cur.fetchall()
-    Fixtures = [desc[0] for desc in cur.description]
-    print(f"{Fixtures}")
-    return render_template('members.html',Fixtures=select_Fixture,dbfixtures=Fixtures)
+    cur.execute("select MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone from Members where MemberID=%s",(MemberID,))
+    select_admin = cur.fetchall()
+    admin = [desc[0] for desc in cur.description]
+    print(f"{admin}")
+    return render_template('admin.html',admin=select_admin)
 
 @app.route('/members/update', methods=['GET','POST']) #Member page
 def MembersUpdate():

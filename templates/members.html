@@ -5,38 +5,82 @@
     <title>Members</title>
 </head>
 <body>
+  
     <h1>Member Page </h1>
 
     {% block content %}
+
     <p>Club News</p>
     <table class="table" action="/clubnews" method="GET">
-      <thead class="thead-dark"></thead>
-        <tbody>
-          {% for News in ClubNews %}
-          <tr>
-          <th>{{News[2:]}}</th>
-          </tr>
-          <tr>
-          <td><a href="/clubNews?NewsID={{News[0]}}">{{News[0:][0:]}}</a></td>
-          </tr>
+      <thead class="thead-dark">
+        <tr>
+        <th>
+          {% for n in News %}
+          {{ n }}
           {% endfor %}
+        </th>
+        </tr>
+      </thead>
+        <tbody>
+          <tr>
+          <td>
+            {% for News in ClubNews %}
+            {% for n in News %}
+            {{ n }}
+            {% endfor %}
+            {% endfor %}
+          </td>
+          </tr>
         </tbody>
     </table>
 
-    <table class="table table-hover">
-      <tbody>
-        {% for Fixture in Fixtures %}
-          <tr>
-            <th>{{clubmember[0:]}}</th>
-          </tr>
+    <table class="table" action="/members" method="GET">
+      <thead class="thead-dark">
         <tr>
-        <td><a href="/fixtures?fixtureid={{Fixture[0]}}">{{Fixtures[]}}</a></td>
+        <th>
+          {% for y in clubmember %}
+          {{ y }}
+          {% endfor %}
+        </th>
         </tr>
-        {% endfor %}
-      </tbody>
+      </thead>
+        <tbody>
+          <tr>
+          <td>
+            {% for member in Members %}
+            {% for x in member %}
+            {{ x }}
+            {% endfor %}
+            {% endfor %}
+          </td>
+          </tr>
+        </tbody>  
     </table>
-        
+
     <button type="button">Edit detail</button> 
+
+    <table class="table table-hover">
+      <thead class="thead-dark">
+        <tr>
+        <th>
+          {% for entry in fixturecolumn %}
+          {{entry}}
+          {% endfor %}
+        </th> 
+        </tr>
+      </thead> <!--A for loop to return the table column data-->
+        <tbody>
+          <tr>
+          <td>
+            {% for Fixture in Fixtureresult %}
+            {% for entry in Fixture %}
+            {{entry}}
+            {% endfor %}
+            {% endfor %}
+          </td>
+          </tr>
+        </tbody> <!--Another for loop to return the table row data-->
+    </table>
         
     {% endblock %} 
 </body>

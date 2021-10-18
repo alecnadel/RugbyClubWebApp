@@ -4,10 +4,23 @@
     <title>Club Administrator</title>
 </head>
 <body>
-    <h1>Admin </h1>
+    <h1>Admin</h1>
 
     {% block content %}
-    <p>Hello Aaron Smith</p>>
+    <p>Welcome Club Admin Aaron Smith</p>
+    <table class="table" action="/admin" method="GET">
+        <thead class="thead-dark"></thead>
+          <tbody>
+            {% for admin in Members %}
+            <tr>
+            <th>{{admin[0]}}</th>
+            </tr>
+            <tr>
+            <td><a href="/admin?MemberID={{admin[0]}}">{{admin[0:][0:]}}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
     {% endblock %}  
 </body>
 </html>
