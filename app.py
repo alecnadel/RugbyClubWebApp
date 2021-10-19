@@ -89,10 +89,14 @@ def getAdmin():
     MemberID = request.args.get("MemberID")
     print(MemberID)
     cur = getCursor()
+    cur.execute("select NewsID, NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate")
+    select_News = cur.fetchall()
+    print(select_News)
+    ClubNews = [desc[0] for desc in cur.description]
     cur.execute("select MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone from Members where MemberID=%s",(MemberID,))
     select_admin = cur.fetchall()
     admin = [desc[0] for desc in cur.description]
     print(f"{admin}")
-    return render_template('admin.html',admin=select_admin)
+    return render_template('admin.html',admin=select_admin,ClubNews=select_News,News=ClubNews)
 
 
