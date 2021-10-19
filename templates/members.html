@@ -12,7 +12,6 @@
 
     <p>Club News</p>
     <table class="table table-bordered border border-success table-striped table-hover" action="/clubnews" method="GET">
-    
       <thead>
         <tr>
         {% for n in News %}
@@ -45,12 +44,13 @@
           {% for x in member %}
           <td>{{ x }}</td>
           {% endfor %}
+          <td><a href="/member/update?MemberID={{member[0]}}" button type="button">Update Contacts</a></button></td>
           </tr>
           {% endfor %} 
-        </tbody>  
+        </tbody>
     </table>
 
-    <button type="button">Edit detail</button> 
+     <!--in here need a a href= / link the route within the button. </a> before the</button>-->
 
     <table class="table table-bordered border border-danger table-striped table-hover">
       <thead>
