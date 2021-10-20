@@ -9,9 +9,11 @@
     <h1>Admin</h1>
 
     {% block content %}
-    <p>Welcome Club Admin Aaron Smith</p>
-    
-    <table class="table table-bordered border border-info table-striped table-hover" action="/clubnews" method="GET">
+    <p>Welcome Club Admin Aaron Smith</p> <br/>
+
+    <a href="/admin/clubmember" button type="button">View Clubmembers</a></button> <br> 
+
+    <table class="table table-bordered border border-info table-striped table-hover" action="/clubnews" method="GET"> <br>
       <thead>
         <tr>
         {% for b in News %}
@@ -26,10 +28,10 @@
             <td>{{ b }}</td>
             {% endfor %}
           </tr>
-          {% endfor %}
-          <a href="/" button type="button">Add News</a></button>
+          {% endfor %} 
+          <a href="/admin/updatenews" button type="button">Add News</a></button> 
         </tbody>
-    </table>
+    </table> 
 
     <table class="table" action="/admin" method="GET">
         <thead>

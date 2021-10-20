@@ -12,7 +12,7 @@
       <option selected>Select a name</option>
         {% for member in Members %}
         {% if member[3]==0 %}
-        <option value ="/member?MemberID={{member[2]}}">{{member[0] ~ ' ' ~ member[1]}}</option>
+        <option value ="/member?MemberID={{member[2]}}">{{member[0] ~ ' ' ~ member[1]}}</option> <!--Here 0 is show the first name and 1 show the last name when select a member name for login-->
         {% else %}
         <option value ="/admin">{{member[0]}} {{member[1]}}</option>  
         {% endif %}
