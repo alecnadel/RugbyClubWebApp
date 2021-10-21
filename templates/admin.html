@@ -29,7 +29,7 @@
             {% endfor %}
           </tr>
           {% endfor %} 
-          <a href="/admin/updatenews" button type="button">Add News</a></button> 
+          <a href="{{url_for('addnews', MemberID=admin[0])}}" button type="button">Add News</a></button> 
         </tbody>
     </table> 
 
