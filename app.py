@@ -54,10 +54,12 @@ def getMembers():
     member = cur.fetchall()
     Members = [desc[0] for desc in cur.description]
     print(f"{Members}")
+    now = datetime.now()
+    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
     #display list of upcoming fixtures. Use join table method to display the game information join in either hometeam or awayteam.
     cur.execute("""select FixtureID, FixtureDate, HomeTeam, AwayTeam, HT.TeamName as HomeTeamName, AWT.TeamName as AwayTeamName from Fixtures 
                     join Teams as HT on Fixtures.HomeTeam = HT.TeamID
-                    join Teams as AWT on Fixtures.AwayTeam = AWT.TeamID where FixtureDate>%s;""",(datetime.now(),))
+                    join Teams as AWT on Fixtures.AwayTeam = AWT.TeamID where FixtureDate>%s;""",(datetime.now(),formatted_date))
     select_Fixture = cur.fetchall()
     Fixtures = [desc[0] for desc in cur.description]
     print(f"{Fixtures}")
@@ -76,7 +78,8 @@ def Updatemembercontacts():
             Email  = request.form.get('Email')
             Phone = request.form.get('Phone')
             cur = getCursor()
-            cur.execute("UPDATE Members SET MemberFirstName=%s, MemberLastName=%s, Address1=%s, Address2=%s, City=%s, Email=%s, Phone=%s where MemberID=%s;",(MemberFirstName,MemberLastName,Address1,Address2,City,Email,Phone,'MemberID',))
+            cur.execute("UPDATE Members SET MemberFirstName=%s, MemberLastName=%s, Address1=%s, Address2=%s, City=%s, Email=%s, Phone=%s where MemberID=%s;",
+            (MemberFirstName,MemberLastName,Address1,Address2,City,Email,Phone,MemberID,))
             return redirect(url_for("getMembers", MemberID = MemberID))
     else:
         MemberID = request.args.get('MemberID')
@@ -110,13 +113,13 @@ def addnews():
     if request.method == 'POST':
         id = genID()
         print(id)
-        ClubID = request.form.get("ClubID")
+        Clubid = request.form.get('ClubID')
         Header = request.form.get('NewsHeader')
         Author = request.form.get('NewsByline')
         Date = request.form.get('NewsDate')
         NewNews = request.form.get('News')
         cur = getCursor()
-        cur.execute("insert into ClubNews(NewsID, ClubID, NewsHeader, NewsByline, NewsDate, News) values (%s,%s,%s,%s,%s,%s);",(str(id),ClubID,Header,Author,Date,NewNews,))
+        cur.execute("insert into ClubNews(ClubID, NewsHeader, NewsByline, NewsDate, News) values (%s,%s,%s,%s,%s);",(Clubid,Header,Author,Date,NewNews,))
         cur.execute("select * from ClubNews where NewsID=%s;",(str(id),))
         return redirect(url_for('getAdmin', MemberID = MemberID))
     else:
@@ -149,7 +152,39 @@ def addmember():
         cur = getCursor()
         cur.execute("INSERT INTO Members(MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, Birthdate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);",
         (str(id),First_Name,Last_Name,Address1,Address2,City,Email,Phone,Birthdate,))
+        cur.execute("SELECT * FROM Members where MemberID=%s",(str(id),))
         select_member = cur.fetchall()
         membercol = [desc[0] for desc in cur.description]
-        return render_template('addmember.html',insertmember=select_member,mber=membercol)
+        return render_template('viewmember.html',insertmember=select_member,mber=membercol)
+    else:
+        return render_template('addmember.html')
 
+@app.route('/admin/clubmember/update', methods=['GET', 'POST'])
+def updatemember():
+    if request.method == 'POST':
+            MemberID = request.form.get('MemberID')
+            Teamid = request.form.get('TeamID')
+            MemberFirstName = request.form.get('MemberFirstName')
+            MemberLastName = request.form.get('MemberLastName')
+            Address1 = request.form.get('Address1')
+            Address2 = request.form.get('Address2')
+            City = request.form.get('City')
+            Email  = request.form.get('Email')
+            Phone = request.form.get('Phone')
+            BirthDate = request.form.get('Birthdate')
+            MembershipStatus = request.form.get('MembershipStatus')
+            AdminAccess = request.form.get('AdminAccess')
+            cur = getCursor()
+            cur.execute("UPDATE Members SET MemberFirstName=%s, MemberLastName=%s, Address1=%s, Address2=%s, City=%s, Email=%s, Phone=%s, Birthdate=%s where MemberID=%s, TeamID=%s;",
+            (Teamid,MemberFirstName,MemberLastName,Address1,Address2,City,Email,Phone,BirthDate,MembershipStatus,AdminAccess,MemberID,))
+            return redirect(url_for("viewmember", MemberID = MemberID))
+    else:
+        MemberID = request.args.get('MemberID')
+        if MemberID == '':
+            return redirect("/")
+        else:
+            cur = getCursor()
+            cur.execute("SELECT * FROM Members where MemberID=%s;",(str(MemberID),))
+            memberresult = cur.fetchone()
+            print(memberresult)
+            return render_template('updatemember.html',memberdetails = memberresult)

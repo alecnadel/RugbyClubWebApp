@@ -13,19 +13,24 @@
       <thead>
         <tr>
         {% for g in col %}
-          <th>{{ g }}</th>
+          <th>{{g}}</th>
           {% endfor %}
         </tr>
       </thead>
         <tbody>
           <tr>
           {% for member in dbmemberresult %}
-
             {% for a in member %}
-            <td>{{ a }}</td>
-            {% endfor %}
+              {% if loop.index == 1 %}
           </tr>
-          {% endfor %} 
+          <tr>
+             <td><a href="/admin/clubmember/update?MemberID={{member[0]}}">{{a}}</a></td>          
+              {% else %}
+              <td>{{a}}</td>
+              {% endif %}
+            {% endfor %}         
+          {% endfor %}
+          </tr> 
         </tbody>
     </table>
 

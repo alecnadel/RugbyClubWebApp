@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Update Member Details</title>
+</head>
+<body>
+    <h1>Update Member Form</h1>
+    {% if memberdetails %}
+    <form action="/admin/clubmember/update" method="POST">
+      {% else %}
+    <form action="/admin/clubmember" method="POST">
+      {% endif %}
+        {% if memberdetails %}
+        <input type="hidden" name="MemberID" value="{{memberdetails[0]}}" />
+        {% endif %}
+        <label for="ClubID">Club ID:</label>
+        <input type="number" id="ClubID" name="ClubID" {% if memberdetails %} value="{{memberdetails[1]}}" {% endif %}/> <br/>
+        <label for="TeamID">Team ID:</label>
+        <input type="number" id="TeamID" name="TeamID" {% if memberdetails %} value="{{memberdetails[2]}}" {% endif %}/> <br/>
+
+        <label for="MemberFirstName">MemberFirstName:</label>
+        <input type="text" id="MemberFirstName" name="MemberFirstName" {% if memberdetails %} value="{{memberdetails[3]}}" {% endif %}/> <br/>
+        <label for="MemberLastName">MemberLastName:</label>
+        <input type="text" id="MemberLastName" name="MemberLastName" {% if memberdetails %} value="{{memberdetails[4]}}" {% endif %}/> <br/>
+
+        <label for="Address1">Address1:</label>
+        <input type="text" id="Address1" name="Address1" {% if memberdetails %} value="{{memberdetails[5]}}" {% endif %}/> <br/>
+        <label for="Address2">Address2:</label>
+        <input type="text" id="Address2" name="Address2" {% if memberdetails %} value="{{memberdetails[6]}}" {% endif %}/> <br/>
+        <label for="City">City:</label>
+        <input type="text" id="City" name="City" {% if memberdetails %} value="{{memberdetails[7]}}" {% endif %}/> <br/>
+
+        <label for="Email">Email:</label>
+        <input type="text" id="Email" name="Email" {% if memberdetails %} value="{{memberdetails[8]}}" {% endif %}/> <br/>
+        <label for="Phone">Phone:</label>
+        <input type="number" id="Phone" name="Phone" {% if memberdetails %} value="{{memberdetails[9]}}" {% endif %}/> <br/>
+        <label for="Birthdate">Birthdate:</label>
+        <input type='date' id="Birthdate" name="Birthdate" {% if memberdetails %} value="{{memberdetails[10]}}" {% endif %}/> <br/>
+<!--the if statements set the default value to the variable that we are working on to update the data-->
+        <p>Membership Status</p>
+        <input type="radio" id="MembershipStatus" name="MembershipStatus" value="0" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
+        <label for="MembershipStatus">0</label> <br>
+        <input type="radio" id="MembershipStatus" name="MembershipStatus" value="1" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
+        <label for="MembershipStatus">1</label> <br>
+<!--check if membership status active or not, 1 mean active member, 0 mean not a active member. Admin has the option to activate or de-activate member-->
+        <p1>Admin Access</p1> <br>
+        <input type="radio" id="AdminAccess" name="AdminAccess" value="0" {% if memberdetails %} value="{{memberdetails[12]}}" {% endif %}/> 
+        <label for ="AdminAccess">0</label> <br>
+        <input type="radio" id="AdminAccess" name="AdminAccess" value="1" {% if memberdetails %} value="{{memberdetails[12]}}" {% endif %}/> 
+        <label for ="AdminAccess">1</label> <br>
+<!--admin also can appoint a member as admin by select 1, then a member can have access to admin feature of the app, or select 0 to cancel the member ability access to admin function-->
+        <input type="Submit"/>
+        <input type="Reset"/>
+    </form>
+</body>
+</html>
