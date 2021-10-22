@@ -67,6 +67,7 @@ def getMembers():
 def Updatemembercontacts():
     MemberID = request.args.get("MemberID")
     if request.method == 'POST':
+            MemberID = request.form.get('MemberID')
             MemberFirstName = request.form.get('MemberFirstName')
             MemberLastName = request.form.get('MemberLastName')
             Address1 = request.form.get('Address1')
@@ -122,11 +123,33 @@ def addnews():
         return render_template('addnews.html')
 
 @app.route('/admin/clubmember', methods=['GET', 'POST'])
-def addmember():
+def viewmember():
     if request.method == 'GET':
         cur = getCursor()
         cur.execute("select * from Members;")
         memberresult = cur.fetchall()
         coldbresult = [desc[0] for desc in cur.description]
         print(f"{coldbresult}")
-        return render_template('addmember.html',dbmemberresult=memberresult,col=coldbresult)
+        return render_template('viewmember.html',dbmemberresult=memberresult,col=coldbresult)
+
+@app.route('/admin/clubmember/add', methods=['GET','POST'])
+def addmember():
+    if request.method == 'POST':
+        print(request.form)
+        id = genID()
+        print(id)
+        First_Name = request.form.get("MemberFirstName")
+        Last_Name = request.form.get("MemberLastName")
+        Address1 = request.form.get("Address1")
+        Address2 = request.form.get("Address2")
+        City = request.form.get("City")
+        Email = request.form.get("Email")
+        Phone = request.form.get("Phone")
+        Birthdate = request.form.get("Birthdate")
+        cur = getCursor()
+        cur.execute("INSERT INTO Members(MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, Birthdate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);",
+        (str(id),First_Name,Last_Name,Address1,Address2,City,Email,Phone,Birthdate,))
+        select_member = cur.fetchall()
+        membercol = [desc[0] for desc in cur.description]
+        return render_template('addmember.html',insertmember=select_member,mber=membercol)
+
