@@ -9,9 +9,12 @@
     <h1>Admin</h1>
 
     {% block content %}
-    <p>Welcome Club Admin Aaron Smith</p> <br/>
+    <p>Welcome Club Admin Aaron Smith</p>
+    <a href='/' button type='submit'>Home Page</a> <br/>
 
-    <a href="/admin/clubmember" button type="button">View Clubmembers</a></button> <br> 
+    <a href="/admin/clubmember" button type="button">View Clubmembers</a></button> <br>
+    <a href="{{url_for('addnews')}}" button type="button">Add News</a></button> <br>
+    <a href="/admin/newteam" button type="submit">Add New Team</a></button> <br>
 
     <table class="table table-bordered border border-info table-striped table-hover" action="/clubnews" method="GET"> <br>
       <thead>
@@ -29,21 +32,39 @@
             {% endfor %}
           </tr>
           {% endfor %} 
-          <a href="{{url_for('addnews', MemberID=admin[0])}}" button type="button">Add News</a></button> 
-        </tbody>
-    </table> 
-
+        </tbody> 
+    </table>
+    
     <table class="table" action="/admin" method="GET">
-        <thead>
+      <thead>
+        <tr>
+        {% for admin in Members %}
+          <th>{{admin[0]}}</th>
+        </tr>
+        <tr>
+          <td><a href="/admin?MemberID={{admin[0]}}">{{admin[0:][0:]}}</a></td>
+        </tr>
+        {% endfor %}
+      </thead>
+    </table>
+
+    <table class="table table-bordered border border-warning table-striped table-hover" action="/teams" method="GET">
+      <thead>
+        <tr>
+          {% for x in selectteam %}
+          <th>{{ x }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+        <tbody>
+          {% for selectteam in Teams %}
           <tr>
-          {% for admin in Members %}
-            <th>{{admin[0]}}</th>
-          </tr>
-          <tr>
-            <td><a href="/admin?MemberID={{admin[0]}}">{{admin[0:][0:]}}</a></td>
+            {% for q in selectteam %}
+            <td>{{ q }}</td>
+            {% endfor %}
           </tr>
           {% endfor %}
-        </thead>
+        </tbody>
     </table>
     {% endblock %}  
 </body>

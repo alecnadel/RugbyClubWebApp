@@ -54,12 +54,10 @@ def getMembers():
     member = cur.fetchall()
     Members = [desc[0] for desc in cur.description]
     print(f"{Members}")
-    now = datetime.now()
-    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
     #display list of upcoming fixtures. Use join table method to display the game information join in either hometeam or awayteam.
     cur.execute("""select FixtureID, FixtureDate, HomeTeam, AwayTeam, HT.TeamName as HomeTeamName, AWT.TeamName as AwayTeamName from Fixtures 
                     join Teams as HT on Fixtures.HomeTeam = HT.TeamID
-                    join Teams as AWT on Fixtures.AwayTeam = AWT.TeamID where FixtureDate>%s;""",(datetime.now(),formatted_date))
+                    join Teams as AWT on Fixtures.AwayTeam = AWT.TeamID where FixtureDate>%s;""",(datetime.now(),))
     select_Fixture = cur.fetchall()
     Fixtures = [desc[0] for desc in cur.description]
     print(f"{Fixtures}")
@@ -101,11 +99,11 @@ def getAdmin():
     select_News = cur.fetchall()
     print(select_News)
     ClubNews = [desc[0] for desc in cur.description]
-    cur.execute("select MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone from Members where MemberID=%s;",(MemberID,))
-    select_admin = cur.fetchone()
-    admin = [desc[0] for desc in cur.description]
-    print(f"{admin}")
-    return render_template('admin.html',admin=select_admin,ClubNews=select_News,News=ClubNews)
+    cur.execute("select ClubID, TeamName, TeamGrade from Teams;")
+    all_teams = cur.fetchall()
+    print(all_teams)
+    tm = [desc[0] for desc in cur.description]
+    return render_template('admin.html',team=all_teams,selectteam=tm,ClubNews=select_News,News=ClubNews)
 
 @app.route('/admin/updatenews', methods=['GET', 'POST'])
 def addnews():
@@ -188,3 +186,21 @@ def updatemember():
             memberresult = cur.fetchone()
             print(memberresult)
             return render_template('updatemember.html',memberdetails = memberresult)
+
+@app.route('/admin/newteam', methods=['GET', 'POST'])
+def addnewteam():
+    if request.method == 'POST':
+        print(request.form)
+        clubid = request.form.get('ClubID')
+        teamname = request.form.get('TeamName')
+        teamgrade = request.form.get('TeamGrade')
+        cur = getCursor()
+        cur.execute("insert into Teams(ClubID, TeamName, TeamGrade) values (%s,%s,%s);",(clubid,teamname,teamgrade,))
+        cur.execute("select * from Teams;")
+        select_team = cur.fetchall()
+        teamscol = [desc[0] for desc in cur.description]
+        return render_template('admin.html',dbteams=select_team,dbcol=teamscol)
+    else:
+        return render_template('newteam.html')
+
+
