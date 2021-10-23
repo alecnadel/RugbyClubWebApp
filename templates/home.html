@@ -12,9 +12,12 @@
       <option selected>Select a name</option>
         {% for member in Members %}
         {% if member[3]==0 %}
-        <option value ="/member?MemberID={{member[2]}}">{{member[0] ~ ' ' ~ member[1]}}</option> <!--Here 0 is show the first name and 1 show the last name when select a member name for login-->
+<!--member[3] here is index number represent admin access. To validate whether the member has admin access or not. Reference to the python function home route'/'.-->
+        <option value ="/member?MemberID={{member[2]}}">{{member[0] ~ ' ' ~ member[1]}}</option> 
+        <!--Here 0 is show the first name and 1 show the last name when select a member name for login-->
         {% else %}
-        <option value ="/admin">{{member[0]}} {{member[1]}}</option>  
+        <option value ="/admin">{{member[0]}} {{member[1]}}</option>
+        <!--Same as here for admin, 0 is the first name and 1 is the last name show in the drop down menu.-->  
         {% endif %}
         {% endfor %}
     </select>

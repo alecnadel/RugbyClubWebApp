@@ -8,7 +8,6 @@
 
     <h1>Club Member Table</h1> <br>
     
-
     <table class="table table-bordered border border-warning table-striped table-hover" action="/members" method="GET">
       <thead>
         <tr>
@@ -22,9 +21,13 @@
           {% for member in dbmemberresult %}
             {% for a in member %}
               {% if loop.index == 1 %}
+<!--col, dbmemberresult are the Jinja variable names pass through from python to request the data from MySQL.
+loop index use here to check the memberID is valid and make it clickable as link if valid and bring your to
+update the member contacts page.-->
           </tr>
           <tr>
-             <td><a href="/admin/clubmember/update?MemberID={{member[0]}}">{{a}}</a></td>          
+             <td><a href="/admin/clubmember/update?MemberID={{member[0]}}">{{a}}</a></td>
+<!--The link tells the system where to go on the browser page and read the MemberID.-->          
               {% else %}
               <td>{{a}}</td>
               {% endif %}
@@ -35,6 +38,6 @@
     </table>
 
     <a href="/admin/clubmember/add" button type="button">Add Club Member</a></button>
-    
+<!--This link is a functional button bring you to the add a new member page for admin to add new member.-->
 </body>    
 </html>

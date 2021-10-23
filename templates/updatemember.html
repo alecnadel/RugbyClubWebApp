@@ -11,9 +11,13 @@
       {% else %}
     <form action="/admin/clubmember" method="POST">
       {% endif %}
+<!--Clubmember update through form action here is the sub-route of clubmember, and use method POST allow user submit the form.
+The second form action making sure the data update to the right place in the browser.-->
+
         {% if memberdetails %}
         <input type="hidden" name="MemberID" value="{{memberdetails[0]}}" />
         {% endif %}
+<!--Here if statement in Jinja template tells the user if update the member details, then add a new field to the form and the memberID use in value there.-->
         <label for="ClubID">Club ID:</label>
         <input type="number" id="ClubID" name="ClubID" {% if memberdetails %} value="{{memberdetails[1]}}" {% endif %}/> <br/>
         <label for="TeamID">Team ID:</label>
@@ -30,28 +34,29 @@
         <input type="text" id="Address2" name="Address2" {% if memberdetails %} value="{{memberdetails[6]}}" {% endif %}/> <br/>
         <label for="City">City:</label>
         <input type="text" id="City" name="City" {% if memberdetails %} value="{{memberdetails[7]}}" {% endif %}/> <br/>
-
+<!--Give a space separate each part of the field. if statements to set the value to the Jinja variable name with index number to know
+which column of data pass through from the database and update the data accordingly.-->
         <label for="Email">Email:</label>
         <input type="text" id="Email" name="Email" {% if memberdetails %} value="{{memberdetails[8]}}" {% endif %}/> <br/>
         <label for="Phone">Phone:</label>
         <input type="number" id="Phone" name="Phone" {% if memberdetails %} value="{{memberdetails[9]}}" {% endif %}/> <br/>
         <label for="Birthdate">Birthdate:</label>
         <input type='date' id="Birthdate" name="Birthdate" {% if memberdetails %} value="{{memberdetails[10]}}" {% endif %}/> 
-<!--the if statements set the default value to the variable that we are working on to update the data-->
+<!--The if statements set the default value to the variable that we are working on to update the data-->
         <p>Membership Status</p>
         <input type="radio" id="MembershipStatus" name="MembershipStatus" value="0" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
         <label for="MembershipStatus">0</label> <br>
         <input type="radio" id="MembershipStatus" name="MembershipStatus" value="1" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
         <label for="MembershipStatus">1</label> <br>
         Hint: If select 0, membership will be de-activate, or select 1 to re-activate the member. <br>
-<!--check if membership status active or not, 1 mean active member, 0 mean not a active member. Admin has the option to activate or de-activate member-->
+<!--Check if membership status active or not, 1 mean active member, 0 mean not a active member. Admin has the option to activate or de-activate member-->
         <p1>Admin Access</p1> <br>
         <input type="radio" id="AdminAccess" name="AdminAccess" value="0" {% if memberdetails %} value="{{memberdetails[12]}}" {% endif %}/> 
         <label for ="AdminAccess">0</label> <br>
         <input type="radio" id="AdminAccess" name="AdminAccess" value="1" {% if memberdetails %} value="{{memberdetails[12]}}" {% endif %}/> 
         <label for ="AdminAccess">1</label> <br>
         Hint: When select 1 you will give a member access to the club admin function, select 0 to cancel their admin access ability. <br>
-<!--admin also can appoint a member as admin by select 1, then a member can have access to admin feature of the app, or select 0 to cancel the member ability access to admin function-->
+<!--Admin also can appoint a member as admin by select 1, then a member can have access to admin feature of the app, or select 0 to cancel the member ability access to admin function-->
         <input type="Submit"/>
         <input type="Reset"/>
     </form>

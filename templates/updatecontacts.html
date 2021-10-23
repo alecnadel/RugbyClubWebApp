@@ -12,9 +12,13 @@
       {% else %}
     <form action="/member" method="POST">
       {% endif %}
+<!--Here develop a new route for edit the member and POST for submit the form and allow update the data.
+The member update known as the sub route of member to making sure the user send update to the right place.-->
         {% if Memberdetails %}
-        <input type="hidden" name="MemberID" value="{{Memberdetails[0]}}" /> <!--The MemberID set by the value Memberdetails variable as 0, return the first data.-->
+        <input type="hidden" name="MemberID" value="{{Memberdetails[0]}}" /> 
         {% endif %}
+<!--The MemberID set by the value Memberdetails variable as 0, return the first line of data.
+The type 'hidden' here is to hide the MemberID, not expose it in the field.-->
         <label for="MemberFirstName">MemberFirstName:</label>
         <input type="text" id="MemberFirstName" name="MemberFirstName" {% if Memberdetails %} value="{{Memberdetails[3]}}" {% endif %}/> <br/>
         <label for="MemberLastName">MemberLastName:</label>
@@ -35,5 +39,8 @@
         <input type="Submit"/>
         <input type="Reset"/>
     </form>
+<!--This is a form show all the details of a club member for club admin edit their details and update through to the system.
+Memberdetails is the variable name set use Jinja templating language to loop through the data,
+ to allow update display on the database table and on the browser page.-->
 </body>
 </html>

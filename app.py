@@ -23,7 +23,7 @@ def getCursor():
         return dbconn
     else:
         return dbconn
-#define the cursor action to get the data by connecting to database and enable the connection.
+#Define the cursor function to get the data by connecting to database and enable the connection.
 def genID():
     return uuid.uuid4().fields[1] #Take out the second number of the six numbers make up of uuid.
 
@@ -32,29 +32,31 @@ def genID():
 def home():
     if request.method=='POST':
         root=request.form.get('members')
-        return redirect(root) #root here is the variable call to get the data from the Members table and redirect to the route.
+        return redirect(root) 
+#The root here is the variable call to get the data from the Members table and redirect to the route according to the member names.
     else:
         cur = getCursor()
         cur.execute("select MemberFirstName, MemberLastName, MemberID, AdminAccess from Members;")
         member = cur.fetchall()
         return render_template('home.html', Members=member)
-#this function is return the data from Members table, execute the query through python from MySQL. Then get the data to display on Homepage.
+#This function is return the data from Members table, execute the query through python from MySQL. Then get the data to display on Homepage.
 
-@app.route('/member', methods=['GET','POST']) #Member page/member is a name given as variable for the route on the link.
+@app.route('/member', methods=['GET','POST']) #Member page. Route/member is a name given as variable for the route on the link.
 def getMembers():
     MemberID = request.args.get("MemberID")
     print(MemberID)
     cur = getCursor()
-    cur.execute("select NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate LIMIT 3;") #get data from ClubNews table, display the latest three news item.
+    cur.execute("select NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate LIMIT 3;") 
+#Get data from ClubNews table, display the latest three news item by use limit.
     select_News = cur.fetchall()
     print(select_News)
     ClubNews = [desc[0] for desc in cur.description]
     cur.execute("select MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone from Members where MemberID=%s;",(MemberID,))
-    #get data from Members table and identify the member by their unique MemberID.
+#Get data from Members table and identify the member by their unique MemberID.
     member = cur.fetchall()
     Members = [desc[0] for desc in cur.description]
     print(f"{Members}")
-    #display list of upcoming fixtures. Use join table method to display the game information join in either hometeam or awayteam.
+#Display list of upcoming fixtures. Use join table method to display the game information and know whether the team from hometeam or awayteam.
     cur.execute("""select FixtureID, FixtureDate, HomeTeam, AwayTeam, HT.TeamName as HomeTeamName, AWT.TeamName as AwayTeamName from Fixtures 
                     join Teams as HT on Fixtures.HomeTeam = HT.TeamID
                     join Teams as AWT on Fixtures.AwayTeam = AWT.TeamID where FixtureDate>%s;""",(datetime.now(),))
@@ -79,16 +81,19 @@ def Updatemembercontacts():
             cur.execute("UPDATE Members SET MemberFirstName=%s, MemberLastName=%s, Address1=%s, Address2=%s, City=%s, Email=%s, Phone=%s where MemberID=%s;",
             (MemberFirstName,MemberLastName,Address1,Address2,City,Email,Phone,MemberID,))
             return redirect(url_for("getMembers", MemberID = MemberID))
+#Above code allow members to update their contacts via a new page, redirect here reference to the members function.
+#Update as a keyword in MySQL query to command the system update those details and Set is setting the variable name when retrieve the data from database.
     else:
         MemberID = request.args.get('MemberID')
         if MemberID == '':
-            return redirect("/") #check whether they have a memberID.
+            return redirect("/") #check whether they have a memberID, authenticate the member login.
         else:
             cur = getCursor()
             cur.execute("SELECT * FROM Members where MemberID=%s;",(str(MemberID),))
             select_MemberID = cur.fetchone()
             print(select_MemberID)
             return render_template('updatecontacts.html',Memberdetails = select_MemberID)
+#Last bit of code getting information from the members table and get all the data from html page and set Jinja variable name when use for loop to loop over the data correctly.
 
 @app.route('/admin', methods=['GET','POST']) #Admin page
 def getAdmin():
@@ -104,6 +109,8 @@ def getAdmin():
     print(all_teams)
     tm = [desc[0] for desc in cur.description]
     return render_template('admin.html',team=all_teams,selectteam=tm,ClubNews=select_News,News=ClubNews)
+#Use MemberID identify the admin access and display the News and Teams updates.
+#Two MySQL queries here to select the data we want to see on the admin page.
 
 @app.route('/admin/updatenews', methods=['GET', 'POST'])
 def addnews():
@@ -122,6 +129,9 @@ def addnews():
         return redirect(url_for('getAdmin', MemberID = MemberID))
     else:
         return render_template('addnews.html')
+#This route function allow admin to add new clubnews to the club, request is the word when upload the new data when user submit the form.
+#Two MySQL queries here to get the right data and add it to the database with different set variable names at the end for calling.
+#In here use redirect to link the URL given to bring user to the right place they want to go on the page.
 
 @app.route('/admin/clubmember', methods=['GET', 'POST'])
 def viewmember():
@@ -132,6 +142,7 @@ def viewmember():
         coldbresult = [desc[0] for desc in cur.description]
         print(f"{coldbresult}")
         return render_template('viewmember.html',dbmemberresult=memberresult,col=coldbresult)
+#For admin to see all the members, active or not. GET here is to read the information, but not submitting or editing.
 
 @app.route('/admin/clubmember/add', methods=['GET','POST'])
 def addmember():
@@ -156,6 +167,8 @@ def addmember():
         return render_template('viewmember.html',insertmember=select_member,mber=membercol)
     else:
         return render_template('addmember.html')
+#Add member allow admin to add a new member with POST method when submit the form to let the system know to update the database.
+#Insert and select queries here ensure all the variables are in orders for the display on the page correctly, %s is placeholder for new data insert to database.
 
 @app.route('/admin/clubmember/update', methods=['GET', 'POST'])
 def updatemember():
@@ -186,6 +199,10 @@ def updatemember():
             memberresult = cur.fetchone()
             print(memberresult)
             return render_template('updatemember.html',memberdetails = memberresult)
+#This function allow admin to update edit the existing member details use POST method allow submit the form to the system for changes made.
+#Update is the keyword let the computer know update the row of data to the system and display them with the same order of the variable names after the query.
+#Check the Member with valid ID, if not, bring you back to the home page.
+#Get all the member details from Members table in order for admin to update the Members table data.
 
 @app.route('/admin/newteam', methods=['GET', 'POST'])
 def addnewteam():
@@ -202,5 +219,9 @@ def addnewteam():
         return render_template('admin.html',dbteams=select_team,dbcol=teamscol)
     else:
         return render_template('newteam.html')
+#This part allow admin to add new rugby team and a new opposition team for them to play the game.
+#TeamID will be generated when a new team added to the system, same with the opposition team.
+#Here use insert and select to add the new team data to the Teams table and get all the information from Teams table in order to do that.
+
 
 

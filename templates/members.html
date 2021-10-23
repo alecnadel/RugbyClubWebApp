@@ -30,6 +30,7 @@
           {% endfor %}         
         </tbody>
     </table>
+<!--This is clubnews table for club member to see any latest club news. With News and ClubNews here are the Jinja variable names pass through from app.py.-->
 
     <table class="table table-bordered border border-warning table-striped table-hover" action="/members" method="GET">
       <thead>
@@ -50,9 +51,8 @@
           {% endfor %} 
         </tbody>
     </table>
-
+<!--This table use for loop Jinja templating language by pass variable names clubmember and member through to retrieve data from Members table in the database.-->
      
-
     <table class="table table-bordered border border-danger table-striped table-hover">
       <thead>
         <tr>
@@ -60,7 +60,7 @@
           <th>{{entry}}</th>
           {% endfor %}
         </tr> 
-      </thead> <!--A for loop to return the table column data-->
+      </thead> <!--A for loop to return the Fixtures table column data-->
         <tbody>
           {% for Fixture in Fixtureresult %}
           <tr>
@@ -69,7 +69,7 @@
           {% endfor %}
           </tr>
           {% endfor %}                   
-        </tbody> <!--Another for loop to return the table row data-->
+        </tbody> <!--Another for loop to return from the Fixtures table row of data.-->
     </table>
         
     {% endblock %} 

@@ -16,6 +16,9 @@
     <a href="{{url_for('addnews')}}" button type="button">Add News</a></button> <br>
     <a href="/admin/newteam" button type="submit">Add New Team</a></button> <br>
 
+<!--Each link connect to the button when a user click, it will take them to the new page.
+In this case, for a club admin to access different functions of the system.-->    
+
     <table class="table table-bordered border border-info table-striped table-hover" action="/clubnews" method="GET"> <br>
       <thead>
         <tr>
@@ -34,7 +37,9 @@
           {% endfor %} 
         </tbody> 
     </table>
-    
+<!--A table display the club news use for loop in Jinja to loop from the column data and the row of data in the table body.
+News and ClubNews are the Jinja template variable names pass through data from python flask app.-->
+
     <table class="table" action="/admin" method="GET">
       <thead>
         <tr>
@@ -47,6 +52,7 @@
         {% endfor %}
       </thead>
     </table>
+<!--Locate the admin person from the database in the Members table and read the information on the page as admin.-->
 
     <table class="table table-bordered border border-warning table-striped table-hover" action="/teams" method="GET">
       <thead>
@@ -57,7 +63,7 @@
         </tr>
       </thead>
         <tbody>
-          {% for selectteam in Teams %}
+          {% for selectteam in team %}
           <tr>
             {% for q in selectteam %}
             <td>{{ q }}</td>
@@ -66,6 +72,8 @@
           {% endfor %}
         </tbody>
     </table>
+<!--Another table display the team information on admin page. Selectteam and team here are the Jinja template variable names pass through data.
+The first for loop to loop over the column data from the database table and second for loop to get the row of data from the table to display on the browser page.-->
     {% endblock %}  
 </body>
 </html>
