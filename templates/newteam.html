@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>Add New Team</title>
 </head>
 <body>
   
     <h1>Add New Sport Team</h1>
-    <form action="/admin/newteam" method="POST">
+    <a href='/admin' button type='submit'>Return to Admin Page</a> <br>
+    <form action="/admin/newteam" method="POST"> <br>
 
       <label for="ClubID">Club ID:</label>
-      <input type="number" id="ClubID" name="ClubID"/> <br>
+      <input type="number" id="ClubID" name="ClubID"/> <br> <br>
       <label for="TeamName">Team Name:</label>
-      <input type="text" id="TeamName" name="TeamName"/> <br>
+      <input type="text" id="TeamName" name="TeamName"/> <br> <br>
       <label for="TeamGrade">Team Grade:</label>
-      <input type="number" id="TeamGrade" name="TeamGrade"/> <br>
+      <input type="number" id="TeamGrade" name="TeamGrade"/> <br> <br>
 
       <input type="Submit"/>
       <input type="Reset"/>

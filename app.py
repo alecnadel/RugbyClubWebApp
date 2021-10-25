@@ -102,11 +102,9 @@ def getAdmin():
     cur = getCursor()
     cur.execute("select ClubID, NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate;")
     select_News = cur.fetchall()
-    print(select_News)
     ClubNews = [desc[0] for desc in cur.description]
     cur.execute("select ClubID, TeamName, TeamGrade from Teams;")
     all_teams = cur.fetchall()
-    print(all_teams)
     tm = [desc[0] for desc in cur.description]
     return render_template('admin.html',team=all_teams,selectteam=tm,ClubNews=select_News,News=ClubNews)
 #Use MemberID identify the admin access and display the News and Teams updates.
@@ -161,14 +159,18 @@ def addmember():
         cur = getCursor()
         cur.execute("INSERT INTO Members(MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, Birthdate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);",
         (str(id),First_Name,Last_Name,Address1,Address2,City,Email,Phone,Birthdate,))
-        cur.execute("SELECT * FROM Members where MemberID=%s",(str(id),))
+        cur.execute("SELECT MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, Birthdate FROM Members where MemberID=%s;",(str(id),))
         select_member = cur.fetchall()
         membercol = [desc[0] for desc in cur.description]
         return render_template('viewmember.html',insertmember=select_member,mber=membercol)
     else:
-        return render_template('addmember.html')
+        cur = getCursor()
+        cur.execute("select TeamID from Teams;")
+        selectid = cur.fetchall()
+        return render_template('addmember.html',team=selectid)
 #Add member allow admin to add a new member with POST method when submit the form to let the system know to update the database.
 #Insert and select queries here ensure all the variables are in orders for the display on the page correctly, %s is placeholder for new data insert to database.
+#else condition is the GET request for a drop down menu show list of TeamID available for member to join a team.
 
 @app.route('/admin/clubmember/update', methods=['GET', 'POST'])
 def updatemember():
@@ -223,5 +225,28 @@ def addnewteam():
 #TeamID will be generated when a new team added to the system, same with the opposition team.
 #Here use insert and select to add the new team data to the Teams table and get all the information from Teams table in order to do that.
 
+@app.route('/admin/rugbygame', methods=['GET', 'POST'])
+def addnewgame():
+    if request.method == 'POST':
+        print(request.form)
+        fixturedate = request.form.get('FixtureDate')
+        hometeam = request.form.get('HomeTeam')
+        awayteam = request.form.get('AwayTeam')
+        cur = getCursor()
+        cur.execute("insert into Fixtures(FixtureDate, HomeTeam, AwayTeam) value (%s,%s,%s);",(fixturedate,hometeam,awayteam,))
+        cur.execute("select * from Fixtures;")
+        ht = cur.fetchall()
+        awyteam = [desc[0] for desc in cur.description]
+        return render_template('admin.html',hoeteam=ht,awayt=awyteam)
+    else:
+        return render_template('newfixtures.html')
 
-
+@app.route('/admin/eligibility', methods=['GET', 'POST'])
+def eligibility():
+    if request.method == 'GET':
+        MemberID = request.args.get("MemberID")
+        cur = getCursor()
+        cur.execute("select MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone from Members where MemberID=%s;",(MemberID,))
+        member = cur.fetchall()
+        Members = [desc[0] for desc in cur.description]
+        return render_template('eligibility.html',grade=member,mg=Members)
