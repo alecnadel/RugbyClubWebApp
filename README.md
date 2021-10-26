@@ -53,7 +53,8 @@ Start with the main function of the admin, it connect to the admin html template
 and check if they have admin access. I assume the validaity of the function to define the capability of a admin within the system which is a key page that connect
 with other functions. The layout of the admin page I have decided to make it to one side with all the buttons have a space between them and with line of space for
 each element. Also, give it a colourful design of the buttons to have a great contrast to the white background. It is easily for the admin to select which function
-they like to go in. 
+they like to go in.
+
 The other parts of the admin functions where I thought that would be the nature flow of a webpage.
 Club admin page function followed by add news item function and members list display on the page. 
 The route with add news function return with the name add news html template where it has all the key dataset for admin to add a new news item.
@@ -66,6 +67,13 @@ The design logic also clear that use light yellow border with white background c
 The update member function has a similar code structure to the member update contacts as my assumption was both are being update and both updating
 data from the database use UPDATE as keyword for the MySQL query in python function and redirect it back to the view member page to see the changes made
 once the update command executed.
+My assumption with the view member page also combined with the report all active members page as thinking when the admin add a new member or update a member 
+can update their membership status. Through that route it can display all the active members If the club admin set all members to active in the form setting.
+Return to the admin page and refresh, then go back to the view club member page to see all the active members to print if needed.
+Assumption made here also take the design decision and page structure into consideration with less page and one less function to write, make it easier to integrate
+with the two. I would assume that does the job and still easy to use for the user to get around the page between view member, add members and update member details
+from the club admin functions.
+
 The next function add new team also linked to the admin page as the app route suggested along with the add new fixtures. As those app route put the route function
 design logic in mind. Part of the admin page extend to another page and once the information either update or add to the existing database then bring the user
 back to the default page which the admin page. 
@@ -75,5 +83,10 @@ is the child page of the admin page. The variable names are given meaning to bot
 and MySQL query. 
 Again, with the design element to the page, for simplicity and user friendly, i choose white background for consistency with minimalist design idea in mind
 to make the page look tidy but not boring. 
+
+Overall, the webapp build around simple solution principle and user friendly in mind, but not focus on make it look elegant or pretty in any shape or form.
+Most assumption and design element take simplicity into consideration and sound structure of the page. With different app route well connected and python functions
+interconnect with MySQL queries and execute the queries to add or update the data on user command.
+
 
 
