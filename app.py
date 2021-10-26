@@ -247,7 +247,7 @@ def addnewgame():
         awayteam = request.form.get('AwayTeam')
         cur = getCursor()
         cur.execute("insert into Fixtures(FixtureDate, HomeTeam, AwayTeam) value (%s,%s,%s);",(fixturedate,hometeam,awayteam,))
-        cur.execute("select * from Fixtures;")
+        cur.execute("select * from Fixtures;") #Join table select teams join grade tables. TeamGrade and GradeID are dataset to join.
         ht = cur.fetchall()
         awyteam = [desc[0] for desc in cur.description]
         return render_template('admin.html',hoeteam=ht,awayt=awyteam)
