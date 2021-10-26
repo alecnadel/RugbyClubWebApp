@@ -43,7 +43,7 @@ def home():
 
 @app.route('/member', methods=['GET','POST']) #Member page. Route/member is a name given as variable for the route on the link.
 def getMembers():
-    MemberID = request.args.get("MemberID")
+    MemberID = request.args.get('MemberID')
     print(MemberID)
     cur = getCursor()
     cur.execute("select NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate LIMIT 3;") 
@@ -67,7 +67,7 @@ def getMembers():
 
 @app.route('/member/update', methods=['GET','POST']) #Member page
 def Updatemembercontacts():
-    MemberID = request.args.get("MemberID")
+    MemberID = request.args.get('MemberID')
     if request.method == 'POST':
             MemberID = request.form.get('MemberID')
             MemberFirstName = request.form.get('MemberFirstName')
@@ -80,7 +80,7 @@ def Updatemembercontacts():
             cur = getCursor()
             cur.execute("UPDATE Members SET MemberFirstName=%s, MemberLastName=%s, Address1=%s, Address2=%s, City=%s, Email=%s, Phone=%s where MemberID=%s;",
             (MemberFirstName,MemberLastName,Address1,Address2,City,Email,Phone,MemberID,))
-            return redirect(url_for("getMembers", MemberID = MemberID))
+            return redirect(url_for("getMembers", MemberID=MemberID))
 #Above code allow members to update their contacts via a new page, redirect here reference to the members function.
 #Update as a keyword in MySQL query to command the system update those details and Set is setting the variable name when retrieve the data from database.
     else:
@@ -92,12 +92,12 @@ def Updatemembercontacts():
             cur.execute("SELECT * FROM Members where MemberID=%s;",(str(MemberID),))
             select_MemberID = cur.fetchone()
             print(select_MemberID)
-            return render_template('updatecontacts.html',Memberdetails = select_MemberID)
+            return render_template('updatecontacts.html',Memberdetails=select_MemberID)
 #Last bit of code getting information from the members table and get all the data from html page and set Jinja variable name when use for loop to loop over the data correctly.
 
 @app.route('/admin', methods=['GET','POST']) #Admin page
 def getAdmin():
-    MemberID = request.args.get("MemberID")
+    MemberID = request.args.get('MemberID')
     print(MemberID)
     cur = getCursor()
     cur.execute("select ClubID, NewsHeader, NewsByline, NewsDate, News from ClubNews ORDER BY NewsDate;")
@@ -112,7 +112,7 @@ def getAdmin():
 
 @app.route('/admin/updatenews', methods=['GET', 'POST'])
 def addnews():
-    MemberID = request.args.get("MemberID")
+    MemberID = request.args.get('MemberID')
     if request.method == 'POST':
         id = genID()
         print(id)
@@ -124,7 +124,8 @@ def addnews():
         cur = getCursor()
         cur.execute("insert into ClubNews(ClubID, NewsHeader, NewsByline, NewsDate, News) values (%s,%s,%s,%s,%s);",(Clubid,Header,Author,Date,NewNews,))
         cur.execute("select * from ClubNews where NewsID=%s;",(str(id),))
-        return redirect(url_for('getAdmin', MemberID = MemberID))
+        MemberID = cur.fetchall()
+        return redirect(url_for('getAdmin',pickmember=MemberID))
     else:
         return render_template('addnews.html')
 #This route function allow admin to add new clubnews to the club, request is the word when upload the new data when user submit the form.
@@ -148,24 +149,29 @@ def addmember():
         print(request.form)
         id = genID()
         print(id)
-        First_Name = request.form.get("MemberFirstName")
-        Last_Name = request.form.get("MemberLastName")
-        Address1 = request.form.get("Address1")
-        Address2 = request.form.get("Address2")
-        City = request.form.get("City")
-        Email = request.form.get("Email")
-        Phone = request.form.get("Phone")
-        Birthdate = request.form.get("Birthdate")
+        First_Name = request.form.get('MemberFirstName')
+        Last_Name = request.form.get('MemberLastName')
+        Address1 = request.form.get('Address1')
+        Address2 = request.form.get('Address2')
+        City = request.form.get('City')
+        Email = request.form.get('Email')
+        Phone = request.form.get('Phone')
+        Birthdate = request.form.get('Birthdate')
+        Memberstatus = request.form.get('MembershipStatus')
+        Adminaccess = request.form.get('AdminAccess')
         cur = getCursor()
-        cur.execute("INSERT INTO Members(MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, Birthdate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);",
-        (str(id),First_Name,Last_Name,Address1,Address2,City,Email,Phone,Birthdate,))
-        cur.execute("SELECT MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, Birthdate FROM Members where MemberID=%s;",(str(id),))
+        cur.execute("""INSERT INTO Members(MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, 
+        Email, Phone, Birthdate, MembershipStatus, AdminAccess) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);""",
+        (str(id),First_Name,Last_Name,Address1,Address2,City,Email,Phone,Birthdate,Memberstatus,Adminaccess,))
+        cur.execute("""SELECT MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, 
+        Birthdate, MembershipStatus, AdminAccess FROM Members where MemberID=%s;""",(str(id),))
         select_member = cur.fetchall()
         membercol = [desc[0] for desc in cur.description]
         return render_template('viewmember.html',insertmember=select_member,mber=membercol)
     else:
+        teamid = request.form.get("TeamID")
         cur = getCursor()
-        cur.execute("select TeamID from Teams;")
+        cur.execute("select TeamID from Teams;",(teamid,))
         selectid = cur.fetchall()
         return render_template('addmember.html',team=selectid)
 #Add member allow admin to add a new member with POST method when submit the form to let the system know to update the database.
@@ -175,8 +181,9 @@ def addmember():
 @app.route('/admin/clubmember/update', methods=['GET', 'POST'])
 def updatemember():
     if request.method == 'POST':
-            MemberID = request.form.get('MemberID')
-            Teamid = request.form.get('TeamID')
+            memberid = request.form.get('MemberID')
+            clubid = request.form.get('ClubID')
+            teamid = request.form.get('TeamID')
             MemberFirstName = request.form.get('MemberFirstName')
             MemberLastName = request.form.get('MemberLastName')
             Address1 = request.form.get('Address1')
@@ -188,19 +195,21 @@ def updatemember():
             MembershipStatus = request.form.get('MembershipStatus')
             AdminAccess = request.form.get('AdminAccess')
             cur = getCursor()
-            cur.execute("UPDATE Members SET MemberFirstName=%s, MemberLastName=%s, Address1=%s, Address2=%s, City=%s, Email=%s, Phone=%s, Birthdate=%s where MemberID=%s, TeamID=%s;",
-            (Teamid,MemberFirstName,MemberLastName,Address1,Address2,City,Email,Phone,BirthDate,MembershipStatus,AdminAccess,MemberID,))
-            return redirect(url_for("viewmember", MemberID = MemberID))
+            cur.execute("""UPDATE Members SET ClubID=%s, TeamID=%s, MemberFirstName=%s, MemberLastName=%s, Address1=%s, Address2=%s, 
+            City=%s, Email=%s, Phone=%s, Birthdate=%s, MembershipStatus=%s, AdminAccess=%s where MemberID=%s;""",
+            (clubid,teamid,MemberFirstName,MemberLastName,Address1,Address2,City,Email,Phone,BirthDate,MembershipStatus,AdminAccess,memberid,))
+            memberID = cur.fetchall()
+            return redirect(url_for("viewmember",pickID=memberID))
     else:
         MemberID = request.args.get('MemberID')
         if MemberID == '':
-            return redirect("/")
+            return redirect("/")        
         else:
             cur = getCursor()
             cur.execute("SELECT * FROM Members where MemberID=%s;",(str(MemberID),))
             memberresult = cur.fetchone()
             print(memberresult)
-            return render_template('updatemember.html',memberdetails = memberresult)
+            return render_template('updatemember.html',memberdetails=memberresult)
 #This function allow admin to update edit the existing member details use POST method allow submit the form to the system for changes made.
 #Update is the keyword let the computer know update the row of data to the system and display them with the same order of the variable names after the query.
 #Check the Member with valid ID, if not, bring you back to the home page.
@@ -210,9 +219,11 @@ def updatemember():
 def addnewteam():
     if request.method == 'POST':
         print(request.form)
+        id = genID()
+        print(id)
         clubid = request.form.get('ClubID')
         teamname = request.form.get('TeamName')
-        teamgrade = request.form.get('TeamGrade')
+        teamgrade = request.form.get('teamgrade')
         cur = getCursor()
         cur.execute("insert into Teams(ClubID, TeamName, TeamGrade) values (%s,%s,%s);",(clubid,teamname,teamgrade,))
         cur.execute("select * from Teams;")
@@ -229,6 +240,8 @@ def addnewteam():
 def addnewgame():
     if request.method == 'POST':
         print(request.form)
+        id = genID()
+        print(id)
         fixturedate = request.form.get('FixtureDate')
         hometeam = request.form.get('HomeTeam')
         awayteam = request.form.get('AwayTeam')
@@ -244,7 +257,7 @@ def addnewgame():
 @app.route('/admin/eligibility', methods=['GET', 'POST'])
 def eligibility():
     if request.method == 'GET':
-        MemberID = request.args.get("MemberID")
+        MemberID = request.args.get('MemberID')
         cur = getCursor()
         cur.execute("select MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone from Members where MemberID=%s;",(MemberID,))
         member = cur.fetchall()
