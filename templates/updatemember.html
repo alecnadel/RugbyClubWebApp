@@ -48,9 +48,9 @@ which column of data pass through from the database and update the data accordin
         <p>Membership Status</p>
         <div class="form-check">
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus" value="0" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
-        <label class="form-check-label" for="MembershipStatus">0</label> <br>
+        <label class="form-check-label" for="MembershipStatus">Inactive</label> <br>
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus" value="1" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
-        <label class="form-check-label" for="MembershipStatus">1</label> <br>
+        <label class="form-check-label" for="MembershipStatus">Active</label> <br>
         </div>  
         Hint: If select 0, membership will be de-activate, or select 1 to re-activate the member. <br>
 <!--Check if membership status active or not, 1 mean active member, 0 mean not a active member. Admin has the option to activate or de-activate member-->

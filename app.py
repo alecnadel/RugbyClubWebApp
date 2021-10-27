@@ -22,7 +22,12 @@ def getCursor():
         dbconn = connection.cursor()
         return dbconn
     else:
-        return dbconn
+        if connection.is_connected():
+            return dbconn
+        else:
+            connection=None
+            dbconn=None
+            return getCursor()
 #Define the cursor function to get the data by connecting to database and enable the connection.
 def genID():
     return uuid.uuid4().fields[1] #Take out the second number of the six numbers make up of uuid.
@@ -116,13 +121,12 @@ def addnews():
     if request.method == 'POST':
         id = genID()
         print(id)
-        Clubid = request.form.get('ClubID')
         Header = request.form.get('NewsHeader')
         Author = request.form.get('NewsByline')
         Date = request.form.get('NewsDate')
         NewNews = request.form.get('News')
         cur = getCursor()
-        cur.execute("insert into ClubNews(ClubID, NewsHeader, NewsByline, NewsDate, News) values (%s,%s,%s,%s,%s);",(Clubid,Header,Author,Date,NewNews,))
+        cur.execute("insert into ClubNews(NewsHeader, NewsByline, NewsDate, News) values (%s,%s,%s,%s);",(Header,Author,Date,NewNews,))
         cur.execute("select * from ClubNews where NewsID=%s;",(str(id),))
         MemberID = cur.fetchall()
         return redirect(url_for('getAdmin',pickmember=MemberID))
@@ -141,7 +145,21 @@ def viewmember():
         coldbresult = [desc[0] for desc in cur.description]
         print(f"{coldbresult}")
         return render_template('viewmember.html',dbmemberresult=memberresult,col=coldbresult)
-#For admin to see all the members, active or not. GET here is to read the information, but not submitting or editing.
+#For admin to see all the members, whether they are active or not. GET here is to read the information, but not submitting or editing.
+#Print a report of all active members can be done through the next function within the admin page.
+
+@app.route('/admin/activemembers', methods=['GET', 'POST'])
+def viewactivemember():
+    if request.method == 'GET':
+        cur = getCursor()
+        cur.execute("select ClubID, TeamID, MemberFirstName, MemberLastName, City, Email, Phone, MembershipStatus, AdminAccess from Members where MembershipStatus=1;")
+        activember = cur.fetchall()
+        mber = [desc[0] for desc in cur.description]
+        print(f"{mber}")
+        return render_template('activemembers.html',dbactive=activember,colmber=mber)
+#This page show all the active member where the previous function display all the club members whether they are active or inactive.
+#This page also suitable for printing with less member details which the admin do not need to know. And the rest of the member details
+#can be found in the previous function view club member page.
 
 @app.route('/admin/clubmember/add', methods=['GET','POST'])
 def addmember():
@@ -169,9 +187,8 @@ def addmember():
         membercol = [desc[0] for desc in cur.description]
         return render_template('viewmember.html',insertmember=select_member,mber=membercol)
     else:
-        teamid = request.form.get("TeamID")
         cur = getCursor()
-        cur.execute("select TeamID from Teams;",(teamid,))
+        cur.execute("select TeamID, TeamName from Teams;")
         selectid = cur.fetchall()
         return render_template('addmember.html',team=selectid)
 #Add member allow admin to add a new member with POST method when submit the form to let the system know to update the database.

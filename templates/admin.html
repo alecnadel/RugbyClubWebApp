@@ -14,7 +14,8 @@
     <p>Welcome Club Admin Aaron Smith</p>
     <div class="d-grid gap-2 d-md-block">
     <a href='/' button class="btn btn-primary" type="button">Home Page</a>
-    <a href="/admin/clubmember" button class="btn btn-danger" type="button">View Clubmembers</a></button>
+    <a href="/admin/clubmember" button class="btn btn-danger" type="button">View All Clubmembers</a></button>
+    <a href="/admin/activemembers" button class="btn btn-info" type="button">View Active Members</a></button>
     <a href="{{url_for('addnews')}}" button class="btn btn-secondary" type="button">Add News</a></button> 
     <a href="/admin/newteam" button class="btn btn-dark" type="button">Add New Team</a></button> 
     <a href="/admin/rugbygame" button class="btn btn-warning" type="button">Add New Fixtures</a></button> 
@@ -22,8 +23,8 @@
     </div>
 <!--Each link connect to the button when a user click, it will take them to the new page.
 In this case, for a club admin to access different functions of the system.-->    
-
-    <table class="table table-bordered border border-info table-striped table-hover" action="/clubnews" method="GET"> <br>
+    <p>Club News</p> 
+    <table class="table table-bordered border border-info table-striped table-hover" action="/clubnews" method="GET">
       <thead>
         <tr>
         {% for b in News %}
@@ -55,10 +56,10 @@ News and ClubNews are the Jinja template variable names pass through data from p
         </tr>
         {% endfor %}
       </thead>
-    </table>
+    </table> 
 <!--Locate the admin person from the database in the Members table and read the information on the page as admin.-->
-
-    <table class="table table-bordered border border-warning table-striped table-hover" action="/teams" method="GET">
+    <p1>Teams</p1> 
+    <table class="table table-bordered border border-warning table-striped table-hover" action="/teams" method="GET"> 
       <thead>
         <tr>
           {% for x in selectteam %}

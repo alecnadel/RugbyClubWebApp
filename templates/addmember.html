@@ -17,7 +17,7 @@
       <select id="TeamID" class="form select">
         <option selected>Select a TeamID</option>
           {% for selectid in team %}
-          <option value="">{{selectid[0]}}</option>
+          <option value="{{selectid[0]}}">{{selectid[1]}}</option>
           {% endfor %}
       </select> <br> <br/>
       <label for="MemberFirstName">First Name:</label>
@@ -39,9 +39,9 @@
       <p>Membership Status</p> 
       <div class="form-check">
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus"/> 
-        <label class="form-check-label" for="MembershipStatus">0</label> <br>
+        <label class="form-check-label" for="MembershipStatus">Inactive</label> <br>
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus"/> 
-        <label class="form-check-label" for="MembershipStatus">1</label> <br> <br>
+        <label class="form-check-label" for="MembershipStatus">Active</label> <br> <br>
       </div>
       <p1>Admin Access</p1> <br> <br>
       <div class="form-check">
