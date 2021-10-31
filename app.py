@@ -117,23 +117,23 @@ def getAdmin():
 
 @app.route('/admin/updatenews', methods=['GET', 'POST'])
 def addnews():
-    MemberID = request.args.get('MemberID')
     if request.method == 'POST':
-        id = genID()
-        print(id)
+        print(request.form)
         Header = request.form.get('NewsHeader')
         Author = request.form.get('NewsByline')
         Date = request.form.get('NewsDate')
         NewNews = request.form.get('News')
         cur = getCursor()
-        cur.execute("insert into ClubNews(NewsHeader, NewsByline, NewsDate, News) values (%s,%s,%s,%s);",(Header,Author,Date,NewNews,))
-        cur.execute("select * from ClubNews where NewsID=%s;",(str(id),))
+        cur.execute("insert into ClubNews(ClubID, NewsHeader, NewsByline, NewsDate, News) values (23,%s,%s,%s,%s);",(Header,Author,Date,NewNews,))
+        cur.execute("select * from ClubNews;")
         MemberID = cur.fetchall()
-        return redirect(url_for('getAdmin',pickmember=MemberID))
+        newscol = [desc[0] for desc in cur.description]
+        return redirect(url_for('getAdmin',pickmember=MemberID,dbnew=newscol))
     else:
         return render_template('addnews.html')
 #This route function allow admin to add new clubnews to the club, request is the word when upload the new data when user submit the form.
 #Two MySQL queries here to get the right data and add it to the database with different set variable names at the end for calling.
+#ClubID is default to 23 because that is only club admin belong to the club is able to add news to the club.
 #In here use redirect to link the URL given to bring user to the right place they want to go on the page.
 
 @app.route('/admin/clubmember', methods=['GET', 'POST'])
@@ -152,7 +152,7 @@ def viewmember():
 def viewactivemember():
     if request.method == 'GET':
         cur = getCursor()
-        cur.execute("select ClubID, TeamID, MemberFirstName, MemberLastName, City, Email, Phone, MembershipStatus, AdminAccess from Members where MembershipStatus=1;")
+        cur.execute("select ClubID, TeamID, MemberFirstName, MemberLastName, City, Email, MembershipStatus, AdminAccess from Members where MembershipStatus=1;")
         activember = cur.fetchall()
         mber = [desc[0] for desc in cur.description]
         print(f"{mber}")
@@ -236,19 +236,20 @@ def updatemember():
 def addnewteam():
     if request.method == 'POST':
         print(request.form)
-        id = genID()
-        print(id)
         clubid = request.form.get('ClubID')
         teamname = request.form.get('TeamName')
         teamgrade = request.form.get('teamgrade')
         cur = getCursor()
-        cur.execute("insert into Teams(ClubID, TeamName, TeamGrade) values (%s,%s,%s);",(clubid,teamname,teamgrade,))
+        cur.execute("insert into Teams(ClubID, TeamName, TeamGrade) values (%s,%s,%s);",(str(clubid),teamname,str(teamgrade),))
         cur.execute("select * from Teams;")
         select_team = cur.fetchall()
         teamscol = [desc[0] for desc in cur.description]
-        return render_template('admin.html',dbteams=select_team,dbcol=teamscol)
+        return redirect(url_for('getAdmin',dbteams=select_team,dbcol=teamscol))
     else:
-        return render_template('newteam.html')
+        cur = getCursor()
+        cur.execute("select ClubID, TeamGrade from Teams;")
+        selectgrade = cur.fetchall()
+        return render_template('newteam.html',choosegrade=selectgrade)
 #This part allow admin to add new rugby team and a new opposition team for them to play the game.
 #TeamID will be generated when a new team added to the system, same with the opposition team.
 #Here use insert and select to add the new team data to the Teams table and get all the information from Teams table in order to do that.
@@ -257,8 +258,6 @@ def addnewteam():
 def addnewgame():
     if request.method == 'POST':
         print(request.form)
-        id = genID()
-        print(id)
         fixturedate = request.form.get('FixtureDate')
         hometeam = request.form.get('HomeTeam')
         awayteam = request.form.get('AwayTeam')
@@ -274,9 +273,9 @@ def addnewgame():
 @app.route('/admin/eligibility', methods=['GET', 'POST'])
 def eligibility():
     if request.method == 'GET':
-        MemberID = request.args.get('MemberID')
         cur = getCursor()
-        cur.execute("select MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone from Members where MemberID=%s;",(MemberID,))
-        member = cur.fetchall()
-        Members = [desc[0] for desc in cur.description]
-        return render_template('eligibility.html',grade=member,mg=Members)
+        cur.execute("select ClubID, TeamID, MemberFirstName, MemberLastName, City, Email, MembershipStatus, AdminAccess from Members where MembershipStatus=1;")
+        mberactive = cur.fetchall()
+        mtive = [desc[0] for desc in cur.description]
+        print(f"{mtive}")
+        return render_template('eligibility.html',grade=mberactive,mg=mtive)

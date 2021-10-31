@@ -9,5 +9,23 @@
 
     <a href='/admin' button type='submit'>Return to Admin Page</a> <br>
     
+    <table class="table table-sm table-bordered border border-warning table-striped table-hover" action="/members" method="GET"> <br>
+      <thead>
+        <tr>
+        {% for g in mg %}
+          <th>{{g}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+        <tbody>
+          {% for bm in grade %}
+          <tr>
+            {% for q in bm %}
+            <td>{{q}}</td>
+            {% endfor %} 
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

@@ -42,28 +42,27 @@ which column of data pass through from the database and update the data accordin
         <input type="email" id="Email" name="Email" {% if memberdetails %} value="{{memberdetails[8]}}" {% endif %}/> <br/>
         <label for="Phone">Phone:</label>
         <input type="number" id="Phone" name="Phone" {% if memberdetails %} value="{{memberdetails[9]}}" {% endif %}/> <br/>
-        <label for="Birthdate">Birthdate:</label>
-        <input type='date' id="Birthdate" name="Birthdate" {% if memberdetails %} value="{{memberdetails[10]}}" {% endif %}/> 
+        <label for="Birthdate">Birthdate:</label> 
+        <input type='date' id="Birthdate" name="Birthdate" {% if memberdetails %} value="{{memberdetails[10]}}" {% endif %}/> <br/>
 <!--The if statements set the default value to the variable that we are working on to update the data-->
-        <p>Membership Status</p>
-        <div class="form-check">
+        <br><p>Membership Status</p>
+        <div class="form-check"> 
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus" value="0" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
         <label class="form-check-label" for="MembershipStatus">Inactive</label> <br>
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus" value="1" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
         <label class="form-check-label" for="MembershipStatus">Active</label> <br>
         </div>  
-        Hint: If select 0, membership will be de-activate, or select 1 to re-activate the member. <br>
 <!--Check if membership status active or not, 1 mean active member, 0 mean not a active member. Admin has the option to activate or de-activate member-->
-        <p1>Admin Access</p1> <br>
+        <p1>Admin Access</p1> 
         <div class="form-check">
         <input class="form-check-input" type="radio" id="AdminAccess" name="AdminAccess" value="0" {% if memberdetails %} value="{{memberdetails[12]}}" {% endif %}/> 
         <label class="form-check-label" for="AdminAccess">0</label> <br>
         <input class="form-check-input" type="radio" id="AdminAccess" name="AdminAccess" value="1" {% if memberdetails %} value="{{memberdetails[12]}}" {% endif %}/> 
         <label class="form-check-label" for="AdminAccess">1</label> <br>
-        </div>
+        </div>  
         Hint: When select 1 you will give a member access to the club admin function, select 0 to cancel their admin access ability. <br>
 <!--Admin also can appoint a member as admin by select 1, then a member can have access to admin feature of the app, or select 0 to cancel the member ability access to admin function-->
-        <input type="Submit"/>
+        <br><input type="Submit"/>
         <input type="Reset"/>
     </form>
 </body>

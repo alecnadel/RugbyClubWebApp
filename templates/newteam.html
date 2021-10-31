@@ -13,13 +13,23 @@
     <form action="/admin/newteam" method="POST"> <br>
 
       <label for="ClubID">Club ID:</label>
-      <input type="number" id="ClubID" name="ClubID"/> <br> <br>
+      <select id="ClubID" class="form select">
+        <option selected>Select a ClubID</option>
+          {% for selectgrade in choosegrade %}
+          <option value="{{selectgrade[0]}}">{{selectgrade[0]}}</option>
+          {% endfor %}
+      </select> <br> <br/>
       <label for="TeamName">Team Name:</label>
       <input type="text" id="TeamName" name="TeamName"/> <br> <br>
       <label for="TeamGrade">Team Grade:</label>
-      <input type="number" id="TeamGrade" name="TeamGrade"/> <br> <br>
+      <select id="TeamGrade" class="form select">
+        <option selected>Select a Grade</option>
+          {% for selectgrade in choosegrade %}
+          <option value="{{selectgrade[0]}}">{{selectgrade[1]}}</option>
+          {% endfor %}
+      </select> <br> <br/>
 
-      <input type="Submit"/>
+      <input type="Submit" value='Add'/>
       <input type="Reset"/>
 <!--A form and new route created for admin to add a new team to the club. 
   With POST method allow submit the form through the system and update the Teams table in the database.-->    
