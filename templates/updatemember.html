@@ -7,6 +7,7 @@
     <title>Update Member Details</title>
 </head>
 <body>
+  <div class="container-sm">
     <h1>Update Member Form</h1>
     {% if memberdetails %}
     <form action="/admin/clubmember/update" method="POST">
@@ -21,36 +22,36 @@ The second form action making sure the data update to the right place in the bro
         {% endif %}
 <!--Here if statement in Jinja template tells the user if update the member details, then add a new field to the form and the memberID use in value there.-->
         <label for="ClubID">Club ID:</label>
-        <input type="number" id="ClubID" name="ClubID" {% if memberdetails %} value="{{memberdetails[1]}}" {% endif %}/> <br/>
+        <input type="number" id="ClubID" name="ClubID" {% if memberdetails %} value="{{memberdetails[1]}}" {% endif %}/> <br/> <br>
         <label for="TeamID">Team ID:</label>
-        <input type="number" id="TeamID" name="TeamID" {% if memberdetails %} value="{{memberdetails[2]}}" {% endif %}/> <br/>
+        <input type="number" id="TeamID" name="TeamID" {% if memberdetails %} value="{{memberdetails[2]}}" {% endif %}/> <br/> <br>
 
         <label for="MemberFirstName">MemberFirstName:</label>
-        <input type="text" id="MemberFirstName" name="MemberFirstName" {% if memberdetails %} value="{{memberdetails[3]}}" {% endif %}/> <br/>
+        <input type="text" id="MemberFirstName" name="MemberFirstName" required {% if memberdetails %} value="{{memberdetails[3]}}" {% endif %}/> <br/> <br>
         <label for="MemberLastName">MemberLastName:</label>
-        <input type="text" id="MemberLastName" name="MemberLastName" {% if memberdetails %} value="{{memberdetails[4]}}" {% endif %}/> <br/>
+        <input type="text" id="MemberLastName" name="MemberLastName" required {% if memberdetails %} value="{{memberdetails[4]}}" {% endif %}/> <br/> <br>
 
         <label for="Address1">Address1:</label>
-        <input type="text" id="Address1" name="Address1" {% if memberdetails %} value="{{memberdetails[5]}}" {% endif %}/> <br/>
+        <input type="text" id="Address1" name="Address1" required {% if memberdetails %} value="{{memberdetails[5]}}" {% endif %}/> <br/> <br>
         <label for="Address2">Address2:</label>
-        <input type="text" id="Address2" name="Address2" {% if memberdetails %} value="{{memberdetails[6]}}" {% endif %}/> <br/>
+        <input type="text" id="Address2" name="Address2" required {% if memberdetails %} value="{{memberdetails[6]}}" {% endif %}/> <br/> <br>
         <label for="City">City:</label>
-        <input type="text" id="City" name="City" {% if memberdetails %} value="{{memberdetails[7]}}" {% endif %}/> <br/>
+        <input type="text" id="City" name="City" required {% if memberdetails %} value="{{memberdetails[7]}}" {% endif %}/> <br/> <br>
 <!--Give a space separate each part of the field. if statements to set the value to the Jinja variable name with index number to know
 which column of data pass through from the database and update the data accordingly.-->
         <label for="Email">Email:</label>
-        <input type="email" id="Email" name="Email" {% if memberdetails %} value="{{memberdetails[8]}}" {% endif %}/> <br/>
+        <input type="email" id="Email" name="Email" required {% if memberdetails %} value="{{memberdetails[8]}}" {% endif %}/> <br/> <br>
         <label for="Phone">Phone:</label>
-        <input type="number" id="Phone" name="Phone" {% if memberdetails %} value="{{memberdetails[9]}}" {% endif %}/> <br/>
+        <input type="number" id="Phone" name="Phone" required {% if memberdetails %} value="{{memberdetails[9]}}" {% endif %}/> <br/> <br>
         <label for="Birthdate">Birthdate:</label> 
-        <input type='date' id="Birthdate" name="Birthdate" {% if memberdetails %} value="{{memberdetails[10]}}" {% endif %}/> <br/>
+        <input type='date' id="Birthdate" name="Birthdate" required {% if memberdetails %} value="{{memberdetails[10]}}" {% endif %}/> <br/> <br>
 <!--The if statements set the default value to the variable that we are working on to update the data-->
         <br><p>Membership Status</p>
         <div class="form-check"> 
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus" value="0" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
-        <label class="form-check-label" for="MembershipStatus">Inactive</label> <br>
+        <label class="form-check-label" for="MembershipStatus">0</label> <br>
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus" value="1" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
-        <label class="form-check-label" for="MembershipStatus">Active</label> <br>
+        <label class="form-check-label" for="MembershipStatus">1</label> <br>
         </div>  
 <!--Check if membership status active or not, 1 mean active member, 0 mean not a active member. Admin has the option to activate or de-activate member-->
         <p1>Admin Access</p1> 
@@ -65,5 +66,6 @@ which column of data pass through from the database and update the data accordin
         <br><input type="Submit"/>
         <input type="Reset"/>
     </form>
+   </div>
 </body>
 </html>

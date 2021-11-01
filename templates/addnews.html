@@ -13,13 +13,13 @@
     <form action="/admin/updatenews" method="POST"> <br>
 <!--POST method to submit the new news to the admin page and share the new news to club members.-->
       <label for="NewsHeader">News Header:</label>
-      <input type="text" id="NewsHeader" name="NewsHeader"/> <br> <br>
+      <input type="text" id="NewsHeader" name="NewsHeader" required/> <br> <br>
       <label for="NewsByline">News By line:</label>
-      <input type="text" id="NewsByline" name="NewsByline"/> <br> <br>
+      <input type="text" id="NewsByline" name="NewsByline" required/> <br> <br>
       <label for="NewsDate">News Date:</label>
-      <input type="date" id="NewsDate" name="NewsDate"/> <br> <br>
+      <input type="date" id="NewsDate" name="NewsDate" required/> <br> <br>
       <label for="News" class="form-label">News:</label>
-      <textarea class="form-control form-control-sm" type="text" id="News" name="News" rows="5"></textarea> <br>
+      <textarea class="form-control form-control-sm" type="text" id="News" name="News" rows="5" required></textarea> <br>
 
       <input type="Submit" value='Add'/> 
       <input type="Reset"/>

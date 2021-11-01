@@ -8,10 +8,11 @@
 </head>
 <body>
 
-    <h1>Admin</h1>
+    <h1 class="text-center">Admin Page</h1>
 
     {% block content %}
-    <p>Welcome Club Admin Aaron Smith</p>
+    <p class="text-center">Welcome Club Admin</p>
+  <div class="container-sm">
     <div class="d-grid gap-2 d-md-block">
     <a href='/' button class="btn btn-primary" type="button">Home Page</a>
     <a href="/admin/clubmember" button class="btn btn-danger" type="button">View All Clubmembers</a></button>
@@ -20,7 +21,8 @@
     <a href="/admin/newteam" button class="btn btn-dark" type="button">Add New Team</a></button> 
     <a href="/admin/rugbygame" button class="btn btn-warning" type="button">Add New Fixtures</a></button> 
     <a href="/admin/eligibility" button class="btn btn-success" type="button">View Eligibility Report</a></button>
-    </div>
+    </div> <br>
+  </div>
 <!--Each link connect to the button when a user click, it will take them to the new page.
 In this case, for a club admin to access different functions of the system.-->    
     <p>Club News</p> 
@@ -58,7 +60,7 @@ News and ClubNews are the Jinja template variable names pass through data from p
       </thead>
     </table> 
 <!--Locate the admin person from the database in the Members table and read the information on the page as admin.-->
-    <p1>Teams</p1> 
+    <p>Teams</p> 
     <table class="table table-bordered border border-warning table-striped table-hover" action="/teams" method="GET"> 
       <thead>
         <tr>
@@ -79,6 +81,25 @@ News and ClubNews are the Jinja template variable names pass through data from p
     </table>
 <!--Another table display the team information on admin page. Selectteam and team here are the Jinja template variable names pass through data.
 The first for loop to loop over the column data from the database table and second for loop to get the row of data from the table to display on the browser page.-->
+    <p>Fixtures</p> 
+    <table class="table table-bordered border border-danger table-striped table-hover" action="/fixtures" method="GET"> 
+      <thead>
+        <tr>
+          {% for k in new %}
+          <th>{{ k }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+        <tbody>
+          {% for new in fix %}
+          <tr>
+            {% for w in new %}
+            <td>{{ w }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
     {% endblock %}  
 </body>
 </html>

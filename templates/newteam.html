@@ -8,24 +8,24 @@
 </head>
 <body>
   
-    <h1>Add New Sport Team</h1>
+    <h1>Add New Team</h1>
     <a href='/admin' button type='submit'>Return to Admin Page</a> <br>
     <form action="/admin/newteam" method="POST"> <br>
 
       <label for="ClubID">Club ID:</label>
-      <select id="ClubID" class="form select">
+      <select id="ClubID" name="ClubID" class="form select">
         <option selected>Select a ClubID</option>
           {% for selectgrade in choosegrade %}
           <option value="{{selectgrade[0]}}">{{selectgrade[0]}}</option>
           {% endfor %}
       </select> <br> <br/>
       <label for="TeamName">Team Name:</label>
-      <input type="text" id="TeamName" name="TeamName"/> <br> <br>
+      <input type="text" id="TeamName" name="TeamName" required/> <br> <br>
       <label for="TeamGrade">Team Grade:</label>
-      <select id="TeamGrade" class="form select">
+      <select id="TeamGrade" name="TeamGrade" class="form select">
         <option selected>Select a Grade</option>
           {% for selectgrade in choosegrade %}
-          <option value="{{selectgrade[0]}}">{{selectgrade[1]}}</option>
+          <option value="{{selectgrade[1]}}">{{selectgrade[1]}}</option>
           {% endfor %}
       </select> <br> <br/>
 

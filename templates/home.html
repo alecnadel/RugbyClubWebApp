@@ -7,23 +7,25 @@
     <title>Rugby Club</title>
 </head>
 <body>
-    <h1>Home Page </h1>
-  <form action="/" method="POST">
-    <label for="Name">Member Name</label> <br> <br>
-    <select name='members' class="form-select"> <br>
-      <option selected>Select a name</option> <br> 
-        {% for member in Members %} 
-        {% if member[3]==0 %}
-<!--member[3] here is index number represent admin access. To validate whether the member has admin access or not. Reference to the python function home route'/'.-->
-        <option value ="/member?MemberID={{member[2]}}">{{member[0] ~ ' ' ~ member[1]}}</option> 
-        <!--Here 0 is show the first name and 1 show the last name when select a member name for login-->
-        {% else %}
-        <option value ="/admin">{{member[0]}} {{member[1]}}</option> 
-        <!--Same as here for admin, 0 is the first name and 1 is the last name show in the drop down menu.-->  
-        {% endif %}
-        {% endfor %}
-    </select> <br>
-    <button class="btn btn-primary" type="submit" value="login">Login</button> <br>
-  </form>
+  <div class="container-sm">
+      <h1 class="text-center">Rugby Club Home Page</h1>
+    <form action="/" method="POST">
+      <label for="Name"></label> <br> <br>
+      <select name='members' class="form-select"> <br>
+        <option selected>Select a name</option> <br> 
+          {% for member in Members %} 
+          {% if member[3]==0 %}
+  <!--member[3] here is index number represent admin access. To validate whether the member has admin access or not. Reference to the python function home route'/'.-->
+          <option value ="/member?MemberID={{member[2]}}">{{member[0] ~ ' ' ~ member[1]}}</option> 
+          <!--Here 0 is show the first name and 1 show the last name when select a member name for login-->
+          {% else %}
+          <option value ="/admin">{{member[0]}} {{member[1]}}</option> 
+          <!--Same as here for admin, 0 is the first name and 1 is the last name show in the drop down menu.-->  
+          {% endif %}
+          {% endfor %}
+      </select> <br>
+      <button class="btn btn-primary" type="submit" value="login">Login</button> <br>
+    </form>
+  </div>
 </body>
 </html>

@@ -7,6 +7,7 @@
     <title>Updates</title>
 </head>
 <body>
+  <div class="container-sm">
     <h1>Edit Contact Details</h1>
 
     {% if Memberdetails %}
@@ -22,25 +23,26 @@ The member update known as the sub route of member to making sure the user send 
 <!--The MemberID set by the value Memberdetails variable as 0, return the first line of data.
 The type 'hidden' here is to hide the MemberID, not expose it in the field.-->
         <label for="MemberFirstName">MemberFirstName:</label>
-        <input type="text" id="MemberFirstName" name="MemberFirstName" {% if Memberdetails %} value="{{Memberdetails[3]}}" {% endif %}/> <br/> <br>
+        <input type="text" id="MemberFirstName" name="MemberFirstName" required {% if Memberdetails %} value="{{Memberdetails[3]}}" {% endif %}/> <br/> <br>
         <label for="MemberLastName">MemberLastName:</label>
-        <input type="text" id="MemberLastName" name="MemberLastName" {% if Memberdetails %} value="{{Memberdetails[4]}}" {% endif %}/> <br/> <br>
+        <input type="text" id="MemberLastName" name="MemberLastName" required {% if Memberdetails %} value="{{Memberdetails[4]}}" {% endif %}/> <br/> <br>
 
         <label for="Address1">Address1:</label>
-        <input type="text" id="Address1" name="Address1" {% if Memberdetails %} value="{{Memberdetails[5]}}" {% endif %}/> <br/> <br>
+        <input type="text" id="Address1" name="Address1" required {% if Memberdetails %} value="{{Memberdetails[5]}}" {% endif %}/> <br/> <br>
         <label for="Address2">Address2:</label>
-        <input type="text" id="Address2" name="Address2" {% if Memberdetails %} value="{{Memberdetails[6]}}" {% endif %}/> <br/> <br>
+        <input type="text" id="Address2" name="Address2" required {% if Memberdetails %} value="{{Memberdetails[6]}}" {% endif %}/> <br/> <br>
         <label for="City">City:</label>
-        <input type="text" id="City" name="City" {% if Memberdetails %} value="{{Memberdetails[7]}}" {% endif %}/> <br/> <br>
+        <input type="text" id="City" name="City" required {% if Memberdetails %} value="{{Memberdetails[7]}}" {% endif %}/> <br/> <br>
 
         <label for="Email">Email:</label>
-        <input type="email" id="Email" name="Email" {% if Memberdetails %} value="{{Memberdetails[8]}}" {% endif %}/> <br/> <br>
+        <input type="email" id="Email" name="Email" required {% if Memberdetails %} value="{{Memberdetails[8]}}" {% endif %}/> <br/> <br>
         <label for="Phone">Phone:</label>
-        <input type="number" id="Phone" name="Phone" {% if Memberdetails %} value="{{Memberdetails[9]}}" {% endif %}/> <br/> <br>
+        <input type="number" id="Phone" name="Phone" required {% if Memberdetails %} value="{{Memberdetails[9]}}" {% endif %}/> <br/> <br>
 
         <input type="Submit"/>
         <input type="Reset"/>
     </form>
+  </div>
 <!--This is a form show all the details of a club member for club admin edit their details and update through to the system.
 Memberdetails is the variable name set use Jinja templating language to loop through the data,
  to allow update display on the database table and on the browser page.-->

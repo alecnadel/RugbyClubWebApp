@@ -7,7 +7,7 @@
     <title>Member Form</title>
 </head>
 <body>
-    
+  <div class="container-sm">
     <h1>Add Member</h1>
     <a href='/admin/clubmember' button type='submit'>Return to ClubMember Page</a> <br>
 
@@ -21,27 +21,27 @@
           {% endfor %}
       </select> <br> <br/>
       <label for="MemberFirstName">First Name:</label>
-      <input type="text" id="MemberFirstName" name="MemberFirstName"/> <br> <br>
+      <input type="text" id="MemberFirstName" name="MemberFirstName" required/> <br> <br>
       <label for="MemberLastName">Last Name:</label>
-      <input type="text" id="MemberLastName" name="MemberLastName"/> <br> <br>
+      <input type="text" id="MemberLastName" name="MemberLastName" required/> <br> <br>
       <label for="Address1">Address 1:</label>
-      <input type="text" id="Address1" name="Address1"/> <br> <br>
+      <input type="text" id="Address1" name="Address1" required/> <br> <br>
       <label for="Address2">Address 2:</label>
       <input type="text" id="Address2" name="Address2"/> <br> <br>
       <label for="City">City:</label>
-      <input type="text" id="City" name="City"/> <br> <br>
+      <input type="text" id="City" name="City" required/> <br> <br>
       <label for="Email">Email:</label>
-      <input type="text" id="Email" name="Email"/> <br> <br>
+      <input type="text" id="Email" name="Email" required/> <br> <br>
       <label for="Phone">Phone:</label>
-      <input type="text" id="Phone" name="Phone"/> <br> <br>
+      <input type="text" id="Phone" name="Phone" required/> <br> <br>
       <label for="Birthdate">Birthdate:</label>
-      <input type="date" id="Birthdate" name="Birthdate"/> <br> <br>
+      <input type="date" id="Birthdate" name="Birthdate" required/> <br> <br>
       <p>Membership Status</p> 
       <div class="form-check">
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus"/> 
-        <label class="form-check-label" for="MembershipStatus">Inactive</label> <br>
+        <label class="form-check-label" for="MembershipStatus">0</label> <br>
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus"/> 
-        <label class="form-check-label" for="MembershipStatus">Active</label> <br> <br>
+        <label class="form-check-label" for="MembershipStatus">1</label> <br> <br>
       </div>
       <p1>Admin Access</p1> <br> <br>
       <div class="form-check">
@@ -55,6 +55,6 @@
       <input type="Reset"/>
 <!--Create a form for admin to insert new details of a member.-->
     </form>
-    
+  </div>
 </body>    
 </html>
