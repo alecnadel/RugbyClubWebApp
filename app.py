@@ -116,8 +116,9 @@ def getAdmin():
     cur.execute("select ClubID, TeamName, TeamGrade from Teams;")
     all_teams = cur.fetchall()
     tm = [desc[0] for desc in cur.description]
-    cur.execute("""select FixtureID, FixtureDate, HT.TeamName as HomeTeamName, AWT.TeamName as AwayTeamName from Fixtures join Teams as HT on Fixtures.HomeTeam = HT.TeamID
-join Teams as AWT on Fixtures.AwayTeam = AWT.TeamID;""")
+    cur.execute("""select FixtureID, FixtureDate, HT.TeamName as HomeTeamName, AWT.TeamName as AwayTeamName from Fixtures 
+                    join Teams as HT on Fixtures.HomeTeam = HT.TeamID
+                    join Teams as AWT on Fixtures.AwayTeam = AWT.TeamID;""")
     new_game = cur.fetchall()
     nfixture = [desc[0] for desc in cur.description]
     return render_template('admin.html',team=all_teams,selectteam=tm,ClubNews=select_News,News=ClubNews,fix=new_game,new=nfixture)
@@ -151,6 +152,7 @@ def viewmember():
         cur = getCursor()
         cur.execute("select * from Members;")
         memberresult = cur.fetchall()
+        print(f"memberresult={memberresult}") #MemberID
         coldbresult = [desc[0] for desc in cur.description]
         print(f"{coldbresult}")
         return render_template('viewmember.html',dbmemberresult=memberresult,col=coldbresult)
@@ -193,7 +195,7 @@ def addmember():
         Email, Phone, Birthdate, MembershipStatus, AdminAccess) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);""",
         (str(id),First_Name,Last_Name,Address1,Address2,City,Email,Phone,Birthdate,Memberstatus,Adminaccess,))
         cur.execute("""SELECT MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, 
-        Birthdate, MembershipStatus, AdminAccess FROM Members where MemberID=%s and MembershipStatus=1 and AdminAccess=0;""",(str(id),))
+        Birthdate, MembershipStatus, AdminAccess FROM Members where MemberID=%s;""",(str(id),))
         select_member = cur.fetchall()
         membercol = [desc[0] for desc in cur.description]
         return redirect(url_for('viewmember',insertmember=select_member,mber=membercol))
@@ -224,22 +226,29 @@ def updatemember():
             BirthDate = request.form.get('Birthdate')
             MembershipStatus = request.form.get('MembershipStatus')
             AdminAccess = request.form.get('AdminAccess')
+            if teamid == "NULL":
+                teamid = None
             cur = getCursor()
             cur.execute("""UPDATE Members SET ClubID=%s, TeamID=%s, MemberFirstName=%s, MemberLastName=%s, Address1=%s, Address2=%s, 
             City=%s, Email=%s, Phone=%s, Birthdate=%s, MembershipStatus=%s, AdminAccess=%s where MemberID=%s;""",
             (clubid,teamid,MemberFirstName,MemberLastName,Address1,Address2,City,Email,Phone,BirthDate,MembershipStatus,AdminAccess,memberid,))
             memberID = cur.fetchall()
-            return redirect(url_for("viewmember",pickID=memberID))
+            print(memberID)
+            return redirect(url_for("viewmember"))
     else:
         MemberID = request.args.get('MemberID')
+        print(f"MemberID={MemberID}")
         if MemberID == '':
             return redirect("/")        
         else:
             cur = getCursor()
-            cur.execute("SELECT * FROM Members where MemberID=%s;",(str(MemberID),))
-            memberresult = cur.fetchone()
-            print(memberresult)
-            return render_template('updatemember.html',memberdetails=memberresult)
+            cur.execute("select * from Members left join Teams on Members.TeamID = Teams.TeamID where MemberID=%s;",(MemberID,))
+            memberresult = cur.fetchall()
+            print(f"memberresult={memberresult}")
+            ClubID = 23
+            cur.execute("SELECT TeamID, TeamName FROM Teams where ClubID=%s;",(ClubID,))
+            tmid = cur.fetchall()
+            return render_template('updatemember.html',memberdetails=memberresult,tmid=tmid)
 
 #This part allow admin to add new rugby team and a new opposition team for them to play the game.
 #TeamID will be generated when a new team added to the system, same with the opposition team.
@@ -267,6 +276,8 @@ def addnewteam():
 #Here again use insert SQL query to add it onto database and select to get the data from SQL database.
 #Two selects use join table from SQL query to get the teamnames with hometeam and awayteam to show two different teams play on the same grade.
 #Redirect route used to get the admin back to their club admin page when a new fixture is add to the club.
+#My logic with 'GET' request there is show the admin all team names and with the grade next to the team name that they pick,
+#so the admin should not pick the same team name and pick the home team and away team the same grade.
 @app.route('/admin/rugbygame', methods=['GET', 'POST'])
 def addnewgame():
     if request.method == 'POST':

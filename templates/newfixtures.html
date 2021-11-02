@@ -14,7 +14,7 @@
     <form action="/admin/rugbygame" method="POST"> <br>
 
       <label for="FixtureDate">Fixture Date:</label>
-      <input type="date" id="FixtureDate" name="FixtureDate"/> <br> <br>
+      <input type="date" id="FixtureDate" name="FixtureDate" required/> <br> <br>
       
       <label for="HomeTeam">HomeTeam:</label>
       <select id="HomeTeam" name="HomeTeam" class="form select">
@@ -33,7 +33,9 @@
 
       <input type="Submit"/>
       <input type="Reset"/>
-    
+<!--This is for admin to create a new fixture with fixture date, all the team names and the grade name in the drop down menu for admin to choose.
+Note that I put grade name in with the team name drop down because it is easier for admin to select it at the same time but make sure not select
+the same team name and must match the same grade name when create a new game.-->    
     </form>
 
 </body>
