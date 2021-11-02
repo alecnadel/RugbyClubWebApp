@@ -52,7 +52,8 @@ which column of data pass through from the database and update the data accordin
         <label class="form-check-label" for="MembershipStatus">0</label> <br>
         <input class="form-check-input" type="radio" id="MembershipStatus" name="MembershipStatus" value="1" {% if memberdetails %} value="{{memberdetails[11]}}" {% endif %}/> 
         <label class="form-check-label" for="MembershipStatus">1</label> <br>
-        </div>  
+        </div>
+        Hint: When select 0 mean de-activate a member and 1 mean re-activate them again. <br>  
 <!--Check if membership status active or not, 1 mean active member, 0 mean not a active member. Admin has the option to activate or de-activate member-->
         <p1>Admin Access</p1> 
         <div class="form-check">

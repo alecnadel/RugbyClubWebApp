@@ -284,12 +284,10 @@ def addnewgame():
         return redirect(url_for('getAdmin',hoeteam=ht,awayt=awyteam))
     else:
         cur = getCursor()
-        cur.execute("""select FixtureID, FixtureDate, HomeTeam, AwayTeam, HT.TeamName as HomeTeamName, AWT.TeamName as AwayTeamName from Fixtures 
-                    join Teams as HT on Fixtures.HomeTeam = HT.TeamID
-                    join Teams as AWT on Fixtures.AwayTeam = AWT.TeamID;""")
-        select_ht = cur.fetchall()
+        cur.execute("select TeamID, ClubID, TeamName, TeamGrade, Grades.GradeName from Teams join Grades on Teams.TeamGrade = Grades.GradeID;")
+        select_t = cur.fetchall()
         awaytm = [desc[0] for desc in cur.description]
-        return render_template('newfixtures.html',hoteam=select_ht,tmaway=awaytm)
+        return render_template('newfixtures.html',tms=select_t,tmaway=awaytm)
 
 #Below code is show suitable format printing all active members from the club who is eligible to play in a rugby team based on the min and max age from the grade table.
 #It will need two select statements and calculate the members team grade to determined they are able to play in the game based on the date entered.

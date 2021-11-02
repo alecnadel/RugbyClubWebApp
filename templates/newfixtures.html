@@ -15,18 +15,19 @@
 
       <label for="FixtureDate">Fixture Date:</label>
       <input type="date" id="FixtureDate" name="FixtureDate"/> <br> <br>
+      
       <label for="HomeTeam">HomeTeam:</label>
       <select id="HomeTeam" name="HomeTeam" class="form select">
         <option selected>Select a HomeTeam</option>
-          {% for select_ht in hoteam %}
-          <option value="{{select_ht[2]}}">{{select_ht[4]}}</option>
+          {% for select_t in tms %}
+          <option value="{{select_t[0]}}">{{select_t[2]}} -- {{select_t[4]}}</option>
           {% endfor %}
       </select> <br> <br/>
       <label for="AwayTeam">AwayTeam:</label>
       <select id="AwayTeam" name="AwayTeam" class="form select">
         <option selected>Select a AwayTeam</option>
-          {% for select_ht in hoteam %}
-          <option value="{{select_ht[3]}}">{{select_ht[5]}}</option>
+          {% for select_t in tms %}
+          <option value="{{select_t[0]}}">{{select_t[2]}} -- {{select_t[4]}}</option>
           {% endfor %}
       </select> <br> <br/>
 
