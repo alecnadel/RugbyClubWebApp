@@ -9,7 +9,25 @@
 
     <a href='/admin' button type='submit'>Return to Admin Page</a> <br>
     
-    <table class="table table-sm table-bordered border border-warning table-striped table-hover" action="/members" method="GET"> <br>
+    <form id="gradeeligibility" name="gradeeligibility" action="/admin/eligibility" method="POST"> <br>
+      
+      <label for="eligible_date">Eligible Date:</label>
+      <input type="date" id="eligible_date" name="eligible_date" value="date" required/> <br> <br>
+      <label for="member_grade" class="form-label">Grade:</label>
+      <select id="member_grade" name="member_grade" class="form-select">
+        <option selected>Select a Grade</option>
+        {% for grade in gradetable %}
+          <option value="{{grade[2]}}">{{grade[7]}}</option>
+        {% endfor %}
+      </select> <br>
+      
+        <input type="submit" value="Filter"/>
+        <input type="reset" value="Reset"/>
+
+    </form>
+<!-- Above code show the club admin can select any date and enter any available grade name then filter them to return a table of active member who 
+eligible to play that game. -->
+    <table class="table table-sm table-bordered border border-warning table-striped table-hover" action="/admin/eligibility" method="GET"> <br>
       <thead>
         <tr>
         {% for g in mg %}
@@ -27,5 +45,6 @@
           {% endfor %}
         </tbody>
     </table>
+<!-- This part is the member table return from filter the date and for the admin to print it out. -->
 </body>
 </html>

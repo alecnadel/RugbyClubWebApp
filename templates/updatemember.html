@@ -23,10 +23,10 @@ The second form action making sure the data update to the right place in the bro
 <!--Here if statement in Jinja template tells the user if update the member details, then add a new field to the form and the memberID use in value there.-->
         <label for="ClubID">Club ID:</label>
         <select id="ClubID" name="ClubID" class="form select">
-                <option id="ClubID" name="ClubID" value="23">Crusaders Rugby</option>
-                        
-                  
+        <option id="ClubID" name="ClubID" value="23">Crusaders Rugby</option>
+<!--ClubID set value to 23 as default value, cannot update or change it, it is a system default Clubid.-->
         </select> <br> <br/>
+        
         <label for="TeamID">Team ID:</label>
         <select id="TeamID" name="TeamID" class="form select">
                 {% if memberdetails %}
@@ -37,6 +37,7 @@ The second form action making sure the data update to the right place in the bro
                   {% endfor %}
                   <option value="NULL">None</option>
         </select> <br> <br/>
+<!--Loop through the data to get all the team ID which call team names in the select options drop down menu and NULL there show the member can belong to no team.-->
 
         <label for="MemberFirstName">MemberFirstName:</label>
         <input type="text" id="MemberFirstName" name="MemberFirstName" required {% if memberdetails %} value="{{memberdetails[0][3]}}" {% endif %}/> <br/> <br>

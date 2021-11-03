@@ -152,7 +152,7 @@ def viewmember():
         cur = getCursor()
         cur.execute("select * from Members;")
         memberresult = cur.fetchall()
-        print(f"memberresult={memberresult}") #MemberID
+        print(f"memberresult={memberresult}") #Testing - to get MemberID in the terminal.
         coldbresult = [desc[0] for desc in cur.description]
         print(f"{coldbresult}")
         return render_template('viewmember.html',dbmemberresult=memberresult,col=coldbresult)
@@ -178,8 +178,8 @@ def viewactivemember():
 def addmember():
     if request.method == 'POST':
         print(request.form)
-        id = genID()
-        print(id)
+        Club_ID = request.form.get('ClubID')
+        Team_ID = request.form.get('TeamID')
         First_Name = request.form.get('MemberFirstName')
         Last_Name = request.form.get('MemberLastName')
         Address1 = request.form.get('Address1')
@@ -191,10 +191,10 @@ def addmember():
         Memberstatus = request.form.get('MembershipStatus')
         Adminaccess = request.form.get('AdminAccess')
         cur = getCursor()
-        cur.execute("""INSERT INTO Members(MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, 
-        Email, Phone, Birthdate, MembershipStatus, AdminAccess) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);""",
-        (str(id),First_Name,Last_Name,Address1,Address2,City,Email,Phone,Birthdate,Memberstatus,Adminaccess,))
-        cur.execute("""SELECT MemberID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, 
+        cur.execute("""INSERT INTO Members(MemberID, ClubID, TeamID, MemberFirstName, MemberLastName, Address1, Address2, City, 
+        Email, Phone, Birthdate, MembershipStatus, AdminAccess) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);""",
+        (str(id),Club_ID,Team_ID,First_Name,Last_Name,Address1,Address2,City,Email,Phone,Birthdate,Memberstatus,Adminaccess,))
+        cur.execute("""SELECT MemberID, ClubID, TeamID, MemberFirstName, MemberLastName, Address1, Address2, City, Email, Phone, 
         Birthdate, MembershipStatus, AdminAccess FROM Members where MemberID=%s;""",(str(id),))
         select_member = cur.fetchall()
         membercol = [desc[0] for desc in cur.description]
@@ -237,14 +237,14 @@ def updatemember():
             return redirect(url_for("viewmember"))
     else:
         MemberID = request.args.get('MemberID')
-        print(f"MemberID={MemberID}")
+        print(f"MemberID={MemberID}") #Testing wjether read the memberID in terminal or not.
         if MemberID == '':
             return redirect("/")        
         else:
             cur = getCursor()
             cur.execute("select * from Members left join Teams on Members.TeamID = Teams.TeamID where MemberID=%s;",(MemberID,))
             memberresult = cur.fetchall()
-            print(f"memberresult={memberresult}")
+            print(f"memberresult={memberresult}") #Testing whether the member details return or not.
             ClubID = 23
             cur.execute("SELECT TeamID, TeamName FROM Teams where ClubID=%s;",(ClubID,))
             tmid = cur.fetchall()
@@ -304,10 +304,28 @@ def addnewgame():
 #It will need two select statements and calculate the members team grade to determined they are able to play in the game based on the date entered.
 @app.route('/admin/eligibility', methods=['GET', 'POST'])
 def eligibility():
-    if request.method == 'GET':
+    if request.method == 'POST':
         cur = getCursor()
-        cur.execute("select ClubID, TeamID, MemberFirstName, MemberLastName, City, Email, MembershipStatus, AdminAccess from Members where MembershipStatus=1;")
+        cur.execute("""select MemberID, Members.TeamID, MemberFirstName, MemberLastName, Birthdate, 
+                        Teams.TeamName as Team_Name, Teams.TeamGrade, Grades.GradeName as Grade_Name, Grades.GradeID from Members
+                        left join Teams on Members.TeamID = Teams.TeamID
+                        left join Grades on Teams.TeamGrade = Grades.GradeID
+                        order by TeamName;""")
         mberactive = cur.fetchall()
         mtive = [desc[0] for desc in cur.description]
         print(f"{mtive}")
         return render_template('eligibility.html',grade=mberactive,mg=mtive)
+    else:
+        eligible_date = request.form.get('eligible_date')
+        member_grade = request.form.get('member_grade')
+        print(f"eligible_date={eligible_date}")
+        print(f"member_grade={member_grade}")
+        cur = getCursor()
+        cur.execute("""select MemberID, Members.TeamID, MemberFirstName, MemberLastName, Birthdate, 
+                        Teams.TeamName as Team_Name, Teams.TeamGrade, Grades.GradeName as Grade_Name, Grades.GradeID from Members
+                        left join Teams on Members.TeamID = Teams.TeamID
+                        left join Grades on Teams.TeamGrade = Grades.GradeID
+                        order by TeamName;""")
+        gradetable = cur.fetchall()
+        gradename = [desc[0] for desc in cur.description]
+        return render_template('eligibility.html',gradetable=gradetable,gradename=gradename)

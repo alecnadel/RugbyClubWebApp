@@ -13,13 +13,21 @@
 
     <form action="/admin/clubmember/add" method="POST"> <br>
 <!--The / link to the browser page determined where the form is located on the page.-->
+
+      <label for="ClubID">Club ID:</label>
+      <select id="ClubID" name="ClubID" class="form select">
+      <option id="ClubID" name="ClubID" value="23">Crusaders Rugby</option>
+ <!--ClubID set value to 23 as default value, cannot update or change it, the system given when new member added to the club.-->      
+      </select> <br> <br/>
+
       <label for="id">Team ID:</label>
-      <select id="TeamID" class="form select">
+      <select id="TeamID" name="TeamID" value="TeamID" class="form select">
         <option selected>Select a TeamID</option>
           {% for selectid in team %}
           <option value="{{selectid[0]}}">{{selectid[1]}}</option>
           {% endfor %}
       </select> <br> <br/>
+
       <label for="MemberFirstName">First Name:</label>
       <input type="text" id="MemberFirstName" name="MemberFirstName" required/> <br> <br>
       <label for="MemberLastName">Last Name:</label>
