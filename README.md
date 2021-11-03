@@ -84,7 +84,10 @@ design logic in mind. Part of the admin page extends to another page and once th
 back to the default page which is the admin page. 
 It renders the template making the connection to their Html template to receive any data as I used Jinja templating language to get the variable name from python.
 With the added new fixture, my assumption was separated into two pages, home team fixture and away team fixture. But in the end, I decided to combine it as add new fixture
-with one button access and admin can type in the home team name or away team name, vice versa.
+with one button access and admin can select all the team names from the drop down menu in the hometeam or awayteam, vice versa. 
+But bear in mind as club admin should see the new fixture should not be the same team playing and the team you selected must be the same grade.
+Which admin can see in the team name selection next to the team name it says the grade name of the team. 
+For example: junior, senior or under 18s or Master. 
 
 Lastly, same as the rest of the admin function, grade eligibility checks if a member is eligible to play in a game from the team based on the date they entered.
 The function also has a similar app route which is the child page of the admin page. The variable names are given meaning to both python and Jinja template 
