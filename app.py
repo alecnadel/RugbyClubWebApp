@@ -190,6 +190,8 @@ def addmember():
         Birthdate = request.form.get('Birthdate')
         Memberstatus = request.form.get('MembershipStatus')
         Adminaccess = request.form.get('AdminAccess')
+        if Team_ID == "NULL":
+            Team_ID = None
         cur = getCursor()
         cur.execute("""INSERT INTO Members(MemberID, ClubID, TeamID, MemberFirstName, MemberLastName, Address1, Address2, City, 
         Email, Phone, Birthdate, MembershipStatus, AdminAccess) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);""",
@@ -200,10 +202,19 @@ def addmember():
         membercol = [desc[0] for desc in cur.description]
         return redirect(url_for('viewmember',insertmember=select_member,mber=membercol))
     else:
-        cur = getCursor()
-        cur.execute("select TeamID, TeamName from Teams;")
-        selectid = cur.fetchall()
-        return render_template('addmember.html',team=selectid)
+        MemberID = request.args.get('MemberID')
+        print(f"MemberID={MemberID}") #Testing wjether read the memberID in terminal or not.
+        if MemberID == '':
+            return redirect("/") 
+        else:
+            cur = getCursor()
+            cur.execute("select * from Members left join Teams on Members.TeamID = Teams.TeamID where MemberID=%s;",(MemberID,))
+            member_result = cur.fetchall()
+            print(f"member_result={member_result}") #Testing whether the member details return or not.
+            ClubID = 23
+            cur.execute("select TeamID, TeamName from Teams where ClubID=%s;",(ClubID,))
+            selectid = cur.fetchall()
+            return render_template('addmember.html',member_result=member_result,team=selectid)
 
 #This function allow admin to update and edit the existing member details use 'POST' method to allow admin submit the form to the system for changes made.
 #Update is the keyword let the computer know update the row of data to the system and display them with the same order of the variable names after the query.

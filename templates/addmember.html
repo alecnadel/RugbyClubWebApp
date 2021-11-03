@@ -22,10 +22,13 @@
 
       <label for="id">Team ID:</label>
       <select id="TeamID" name="TeamID" value="TeamID" class="form select">
-        <option selected>Select a TeamID</option>
-          {% for selectid in team %}
-          <option value="{{selectid[0]}}">{{selectid[1]}}</option>
-          {% endfor %}
+          {% if member_result %}
+          <option selected>Select a TeamID</option>
+          {% endif %}
+            {% for selectid in team %}
+            <option value="{{selectid[0]}}">{{selectid[1]}}</option>
+            {% endfor %}
+            <option value="NULL">None</option>
       </select> <br> <br/>
 
       <label for="MemberFirstName">First Name:</label>
