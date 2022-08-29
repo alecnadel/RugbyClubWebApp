@@ -1,5 +1,5 @@
 # RugbyClubWebApp Project Documentation
-#Code in HTML, CSS(bootstrap) Python(Flask) and MySQL(database) to store and allow users to add data.
+#This Flask web application allow users to add personal contact forms, and for admin to add player information, edit and update new games in every location and season.
 
 This project is building a webpage with the required functionalities for rugby clubs.
 The rugby club web app has several functions on the page and back-end login for club admin access.
